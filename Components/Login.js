@@ -10,7 +10,7 @@ function Login()
     return(
      <View style = {styles.container}>
 
-        <Text style={styles.logoText}>Member Login</Text>
+        <Text style={styles.logoText}>Welcome back</Text>
 
          <View style = {styles.inputView}>
              <TextInput

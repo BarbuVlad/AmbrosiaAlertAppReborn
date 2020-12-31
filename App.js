@@ -2,6 +2,7 @@ import React from 'react';
 import { View,StyleSheet,StatusBar} from 'react-native';
 import Router from './Components/Router';
 
+
 let App = () => {
 
   return(
