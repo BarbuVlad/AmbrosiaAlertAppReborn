@@ -8,7 +8,7 @@ import MapView,{PROVIDER_GOOGLE} from "react-native-maps";
 import Localization from './Localization';
 import AmbrosiaMarkers from './AmbrosiaMarkers';
 import MapsButtons from './MapsButtons';
-import GetDeviceInfo from './DeviceInfo';
+import DeviceInfo from './DeviceInfo';
 
 
 const getRedMarkersUrl = "http://92.87.91.16/backend_code/api/red_marker/read.php"
@@ -35,7 +35,7 @@ function Maps()
             mounted.current = true;
             console.log("Component did mount in Maps")
 
-            GetDeviceInfo.getDeviceUniqueId()
+            DeviceInfo.getDeviceUniqueId()
 
             Localization.getCurrentPos((r)=> setRegion(r))
             AmbrosiaMarkers.getMarkers(getRedMarkersUrl, (sms)=>setRedMarkersState(sms))

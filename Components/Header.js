@@ -1,6 +1,7 @@
 import React from 'react';
-import {View,StyleSheet, Image,TouchableOpacity} from 'react-native';
+import {View,Image,TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import styles from '../Styles/Header.styles'
 import hamburgerMenuIcon from '../img/hamburgerMenuIcon.png';
 
 const Header = ({navigation}) => {
@@ -36,54 +37,8 @@ const Header = ({navigation}) => {
         </View>
 
 
-
-
     );
-};
-
-const styles= StyleSheet.create(
-    {
-        gradient:{
-            height:60,
-            alignSelf: 'stretch',
-            padding:10,
-            justifyContent: 'center',
-            alignItems:'center',
-            flex:1
+}
 
 
-        },
-        img:{
-            position:'relative',
-            width: 160,
-            height: 54,
-            marginRight: 35,
-
-        },
-        drawerButton:{
-
-            width: 55,
-            backgroundColor: '#06beb6',
-            elevation: 0,
-            marginRight:0,
-            alignItems: 'center',
-            alignContent:'center',
-            justifyContent: 'center',
-
-
-        },
-        hmbMenu:{
-            width: 30,
-            height:20,
-
-        },
-        generalContainer:{
-            flexDirection: 'row',
-
-
-
-        }
-    });
-
-
-export default Header;
+export default Header
