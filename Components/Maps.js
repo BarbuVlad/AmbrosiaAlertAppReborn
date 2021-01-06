@@ -9,6 +9,7 @@ import Localization from './Localization';
 import AmbrosiaMarkers from './AmbrosiaMarkers';
 import MapsButtons from './MapsButtons';
 import DeviceInfo from './DeviceInfo';
+import Notifications from './Notifications';
 
 
 const getRedMarkersUrl = "http://92.87.91.16/backend_code/api/red_marker/read.php"
@@ -39,17 +40,20 @@ function Maps()
 
             Localization.getCurrentPos((r)=> setRegion(r))
             AmbrosiaMarkers.getMarkers(getRedMarkersUrl, (sms)=>setRedMarkersState(sms))
-
             console.log("markers ARE:",redMarkersState)
+
+
+
         }
         else {
             //do componentDidUpdate logic
-            AmbrosiaMarkers.getMarkers(getRedMarkersUrl, (sms)=>setRedMarkersState(sms))
+         //   AmbrosiaMarkers.getMarkers(getRedMarkersUrl, (sms)=>setRedMarkersState(sms))
             console.log("Component did update MAPS")
 
         }
     },[]);
 
+    Notifications(region,redMarkersState)
 
     return (
     <View style = {{height: '100%'}}>

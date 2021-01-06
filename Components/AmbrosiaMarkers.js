@@ -31,8 +31,8 @@ export default {
 
       axios.post(url,
           {
-              "latitude":"2",
-              "longitude": "2",
+              "latitude":region.latitude,
+              "longitude": region.longitude,
               "uid_user": "4"
           }
           ).then(res=> console.log(res)
