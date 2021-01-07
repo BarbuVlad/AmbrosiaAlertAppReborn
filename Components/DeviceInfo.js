@@ -6,8 +6,8 @@ export default {
     async getDeviceUniqueId()
     {
         //for device unique id
-        let response = await Permissions.requestDeviceInfoPermission()
-        if (response === "granted") {
+        let response = await Permissions.permRequest()
+        if (response.phoneState === "granted") {
             let uniqueId = await getUniqueId()
             console.log("ID is:", uniqueId)
         }

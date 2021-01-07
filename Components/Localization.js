@@ -4,8 +4,11 @@ import Permissions from './Permissions';
 export default {
 
    async getCurrentPos(setRegion){
-      let response = await Permissions.requestLocationPermission()
-      if(response === 'granted')
+
+        let response = await Permissions.permRequest()
+       console.log("FROM LOCALIZATION:",response)
+
+      if(response.location === 'granted')
       {
           this.watchID = Geolocation.watchPosition(position => {
                   console.log("Location has been updated")
@@ -25,4 +28,5 @@ export default {
           );
 
       }
-   }}
+   }
+}

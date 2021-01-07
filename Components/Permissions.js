@@ -1,42 +1,27 @@
 import React from 'react'
 import {PermissionsAndroid} from 'react-native';
+
 export default {
-    async requestLocationPermission() {
-        console.log("In permision --->")
-        try {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            );
-            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                console.log("You can use the location");
-            }
-            else {
-                console.log("location permission denied");
-                alert("Location permission denied");
-            }
-            return granted
-        } catch (err) {
-            console.warn("Error: " + err);
+
+    async permRequest(){
+        let answer
+        try{
+              await PermissionsAndroid.requestMultiple(
+                [PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                          PermissionsAndroid.PERMISSIONS.READ_PHONE_STATE])
+                .then(res =>{
+
+                    let locationPerm = res['android.permission.ACCESS_FINE_LOCATION']
+                    let phoneStatePerm = res['android.permission.READ_PHONE_STATE']
+
+                    answer = {location:locationPerm,phoneState:phoneStatePerm}
+                })
+
+        }catch (err){
+            console.log("Permissions Error:",err)
         }
 
-    },
-    async requestDeviceInfoPermission() {
-        console.log("In permision --->")
-        try {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.READ_PHONE_STATE,
-            );
-            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-                console.log("You can acces device info");
-            }
-            else {
-                console.log("device info permission denied");
-                alert("Device info permission denied");
-            }
-            return granted
-        } catch (err) {
-            console.warn("Error: " + err);
-        }
+ return answer
 
     },
 

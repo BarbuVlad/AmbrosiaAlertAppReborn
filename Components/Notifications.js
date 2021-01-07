@@ -48,7 +48,7 @@ import PushNotification from "react-native-push-notification";
                     // console.log("dist: "+dist);
                     NotificationsSettings
                         .configure()
-                        .localNotification({message:'Ambrosia in'+':'+dist+'m', color: "red", vibrate: true, vibration: 300,channelId: "1"  });
+                        .localNotification({message:'Ambrosia in'+':'+dist+'m', color: "red", vibrate: true, vibration: 300,channelId: "2"  });
                 }
             });
 
