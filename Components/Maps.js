@@ -36,13 +36,13 @@ function Maps()
             mounted.current = true;
             console.log("Component did mount in Maps")
 
-            DeviceInfo.getDeviceUniqueId()
+
 
             Localization.getCurrentPos((r)=> setRegion(r))
             AmbrosiaMarkers.getMarkers(getRedMarkersUrl, (sms)=>setRedMarkersState(sms))
             console.log("markers ARE:",redMarkersState)
 
-
+            DeviceInfo.getDeviceUniqueId()
 
         }
         else {
