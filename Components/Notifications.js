@@ -3,7 +3,6 @@ import NotificationsSettings from './NotificationsSettings'
 import PushNotification from "react-native-push-notification";
  function Notifications(region,redMarkers) {
     let notifiedMarkersList = []
-    console.log(region,redMarkers)
 
     PushNotification.createChannel(
         {

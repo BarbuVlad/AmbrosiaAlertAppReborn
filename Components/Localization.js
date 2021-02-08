@@ -6,7 +6,7 @@ export default {
    async getCurrentPos(setRegion){
 
         let response = await Permissions.permRequest()
-       console.log("FROM LOCALIZATION:",response)
+    //   console.log("FROM LOCALIZATION:",response)
 
       if(response.location === 'granted')
       {

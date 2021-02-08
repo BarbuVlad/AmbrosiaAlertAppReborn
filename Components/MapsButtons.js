@@ -2,7 +2,7 @@ import {Alert, View} from 'react-native';
 import React from 'react';
 import { Icon } from 'react-native-elements'
 import styles from "../Styles/MapsButtons.styles"
-import AmbrosiaMarkers from './AmbrosiaMarkers';
+
 
 export default {
 

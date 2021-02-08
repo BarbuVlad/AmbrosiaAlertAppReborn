@@ -1,8 +1,14 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { View,StatusBar} from 'react-native';
 import Router from './Components/Router';
 
 let App = () => {
+
+    useEffect(()=>{
+        console.log("CALLING FROM APP COMPONENT")
+
+        },[])
+
 
   return(
 

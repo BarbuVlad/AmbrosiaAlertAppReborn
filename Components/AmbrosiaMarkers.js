@@ -31,11 +31,11 @@ let placeMarkerLogic =(region,typeOfUser)=>
             "uid_user": "4"
         })
         .then(res=> {
-            console.log(res.data)
+           // console.log(res.data)
             markerPlacedAnswerAlert("Ambrosia was successfully reported at your location")
         })
         .catch(err=> {
-            console.log(err.message)
+         //   console.log(err.message)
             markerPlacedAnswerAlert("Error")
         })
 }
@@ -60,10 +60,10 @@ export default {
     },
 
 
-  getMarkers(url,setMarkersState) {
+  async getMarkers(url,setMarkersState) {
         let markersData = []
         let markerID = 0
-        axios.get(url)
+        await axios.get(url)
             .then(res=>{
                 for (let i = 0; i < res.data.data.length; i++) {
                     markerID++;
@@ -82,22 +82,24 @@ export default {
                 }
 
             })
-           setMarkersState(markersData)
+        await   setMarkersState(markersData)
    },
 
 
-  showMarkers(markersArr)
+ showMarkers(markersArr, color)
   {
-     return markersArr.map(marker => (
+
+     return  markersArr.map(marker => (
           <Marker
               key={marker.ID}
               coordinate={marker.coordinate}
               title={marker.title}
               description={marker.description}
-
+              pinColor={color}
           />
 
       ))
+
   }
 
 }

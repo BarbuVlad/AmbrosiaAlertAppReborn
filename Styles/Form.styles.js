@@ -12,7 +12,7 @@ export default StyleSheet.create({
         textAlign: 'center',
         fontWeight:"bold",
         fontSize:50,
-        color:"#2c69ad",
+        color:"#06beb6",
         marginBottom:40
     },
     inputView:{
@@ -35,7 +35,7 @@ export default StyleSheet.create({
     },
     loginButton:{
         width:"80%",
-        backgroundColor:"#2c69ad",
+        backgroundColor:"#06beb6",
         borderRadius:25,
         height:50,
         alignItems:"center",
@@ -45,7 +45,7 @@ export default StyleSheet.create({
     },
     registerButton:{
         width:"80%",
-        backgroundColor:"#2c69ad",
+        backgroundColor:"#06beb6",
         borderRadius:25,
         height:50,
         alignItems:"center",
