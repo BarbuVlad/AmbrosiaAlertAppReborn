@@ -12,7 +12,7 @@ export default{
 
     async getStringData(key){
         try {
-            const value = await AsyncStorage.getItem('@storage_Key')
+            const value = await AsyncStorage.getItem(key)
             if(value !== null) {
                 return value
             }

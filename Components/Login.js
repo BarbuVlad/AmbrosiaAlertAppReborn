@@ -4,12 +4,12 @@ import styles from "../Styles/Form.styles"
 import axios from 'axios';
 import localStorage from './LocalStorage'
 
+
 let newVolunteerURL = "http://92.87.91.16/backend_code/api/new_volunteer/login.php"
 let volunteerURL = "http://92.87.91.16/backend_code/api/volunteer/login.php"
 
 
-
-function Login()
+function Login({navigation})
 {
     const [email,setEmail] = useState(0)
     const [password,setPassword] = useState(0)
@@ -31,15 +31,16 @@ function Login()
                  )
 
                 console.log("STORAGE: ", await localStorage.getObjectData("loginData"))
-
-                Alert.alert(
-                    "Login Successful",
-                    "Welcome back!",
-                    [
-                        { text: "OK" }
-                    ],
-                    { cancelable: false }
-                );
+                navigation.navigate("Maps")
+                //
+                // Alert.alert(
+                //     "Login Successful",
+                //     "Welcome back!",
+                //     [
+                //         { text: "OK" }
+                //     ],
+                //     { cancelable: false }
+                // );
 
             })
             .catch(err=> {
@@ -63,42 +64,56 @@ function Login()
             })
     }
 
-    return(
-     <View style = {styles.container}>
 
-        <Text style={styles.logoText}>Welcome back</Text>
 
-         <View style = {styles.inputView}>
-             <TextInput
-                 style={styles.inputText}
-                 placeholder="Email"
-                 placeholderTextColor="#BEBEBE"
-                 onChangeText={text => setEmail(text)}
-             />
-         </View>
+        return(
+            <View style = {styles.container}>
 
-         <View style = {styles.inputView}>
-             <TextInput
-                 style={styles.inputText}
-                 placeholder="Password"
-                 placeholderTextColor="#BEBEBE"
-                 secureTextEntry={true}
-                 onChangeText={text => setPassword(text)}
-             />
-         </View>
+                <Text style={styles.logoText}>Welcome back</Text>
 
-         <TouchableOpacity
-             style={styles.loginButton}
-             onPress={()=>login(newVolunteerURL)}>
-             <Text style={{color:'white',fontSize: 22}}>LOGIN</Text>
-         </TouchableOpacity>
+                <View style = {styles.inputView}>
+                    <TextInput
+                        style={styles.inputText}
+                        placeholder="Email"
+                        placeholderTextColor="#BEBEBE"
+                        onChangeText={text => setEmail(text)}
+                    />
+                </View>
 
-         <TouchableOpacity style={styles.registerButton}>
-             <Text style={{color:'white',fontSize: 22}}>SIGN UP</Text>
-         </TouchableOpacity>
+                <View style = {styles.inputView}>
+                    <TextInput
+                        style={styles.inputText}
+                        placeholder="Password"
+                        placeholderTextColor="#BEBEBE"
+                        secureTextEntry={true}
+                        onChangeText={text => setPassword(text)}
+                    />
+                </View>
 
-     </View>
-        )
+                <TouchableOpacity
+                    style={styles.loginButton}
+                    onPress={()=> {
+
+                        return login(newVolunteerURL)
+
+                    }}>
+                    <Text style={{color:'white',fontSize: 22}}>LOGIN</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.registerButton}
+                  onPress={()=>{
+                      navigation.navigate("Register")
+                  }}
+                >
+                    <Text style={{color:'white',fontSize: 22}}>SIGN UP</Text>
+                </TouchableOpacity>
+
+            </View>)
+
+
+
+
 }
 
 

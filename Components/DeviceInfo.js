@@ -10,6 +10,7 @@ export default {
         if (response.phoneState === "granted") {
             let uniqueId = await getUniqueId()
             console.log("ID is:", uniqueId)
+            return uniqueId
         }
 
     }

@@ -3,7 +3,7 @@ import {View, StyleSheet, Image} from 'react-native';
 import AmbrosiaLogo from '../img/AmbLogo.png'
 
 function SplashScreen(){
-console.log("I've been called")
+console.log("SplashScreen called")
 
         return (
 

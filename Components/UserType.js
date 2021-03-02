@@ -9,8 +9,10 @@ let volunteerURL = "http://92.87.91.16/backend_code/api/volunteer/login.php"
 
 export default{
 
-     checkUserType(){
-        if(DeviceInfo.getDeviceUniqueId() !== "undefined" &&  checkIfValidVolunteer() === null) return "normalUser"
+    async checkUserType(){
+       let  dInfo = await DeviceInfo.getDeviceUniqueId()
+        let volStat =  await checkIfValidVolunteer()
+        if( dInfo!== "undefined" &&  (volStat === null || volStat === undefined)) return "normalUser"
         else return checkIfValidVolunteer()
 
             },
@@ -19,8 +21,13 @@ export default{
 let checkIfValidVolunteer = async (url = newVolunteerURL)=>{
 
     let loginDataFromStorage = await localStorage.getObjectData("loginData")
-    let email =  loginDataFromStorage.email
-    let password = loginDataFromStorage.password
+    let email = ""
+    let password = ""
+    if(loginDataFromStorage !== null){
+         email =  loginDataFromStorage.email
+         password = loginDataFromStorage.password
+    }
+
 
   let y = await axios.post(url  , {
         email: email,
@@ -61,6 +68,7 @@ let checkIfValidVolunteer = async (url = newVolunteerURL)=>{
                 return null
             }
         })
- //  console.log("AXIOS RESPONSE IS: ",y)
-    if(y !== undefined) return y
+    console.log("AXIOS RESPONSE IS: ",y)
+    return y
+
 }

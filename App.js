@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import { View,StatusBar} from 'react-native';
 import Router from './Components/Router';
+import axios from 'axios';
 
 let App = () => {
 
@@ -8,6 +9,9 @@ let App = () => {
         console.log("CALLING FROM APP COMPONENT")
 
         },[])
+
+
+
 
 
   return(

@@ -12,6 +12,8 @@ import DeviceInfo from './DeviceInfo';
 import Notifications from './Notifications';
 import userType from './UserType'
 import {useFocusEffect} from '@react-navigation/native';
+import {useIsDrawerOpen} from '@react-navigation/drawer';
+import LocalStorage from './LocalStorage';
 
 
 const getRedMarkersUrl = "http://92.87.91.16/backend_code/api/red_marker/read.php"
@@ -61,9 +63,14 @@ function Maps()
         React.useCallback( () => {
             //  setUpdateComponent(updateComponent +1)
             let x = async()=>{
+
                 //focused
-                alert("User type:" + await userType.checkUserType())
-                updateMarkers()
+                let uT = await userType.checkUserType()
+                await LocalStorage.storeStringData("userType",uT)
+                alert("User type:" + uT)
+               await updateMarkers()
+                console.log("SDASDAA",uT)
+
             }
             x()
 
@@ -72,6 +79,8 @@ function Maps()
             };
         }, [])
     );
+
+
 
 
     let updateMarkers = async () => {
@@ -102,8 +111,12 @@ function Maps()
             {AmbrosiaMarkers.showMarkers(yellowMarkersState, 'yellow')}
         </MapView>
 
-        {MapsButtons.addMarkerButton(()=>
-            AmbrosiaMarkers.placeMarkerOnLocation(region,"volunteer"))}
+        {MapsButtons.addMarkerButton(async ()=>
+            AmbrosiaMarkers.placeMarkerOnLocation(
+                region,
+                await userType.checkUserType(),
+                await DeviceInfo.getDeviceUniqueId()
+            ))}
 
         {mapRef.current &&  MapsButtons.showMyLocationButton(async()=>
             await mapRef.current.animateToRegion(region))}

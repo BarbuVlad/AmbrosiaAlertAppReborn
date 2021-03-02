@@ -16,19 +16,23 @@ let markerPlacedAnswerAlert =(message)=>
     );
 }
 
-let placeMarkerLogic =(region,typeOfUser)=>
-{
+let placeMarkerLogic =(region, typeOfUser, userUniqueID)=>{
 
     let url
     if(typeOfUser === "normalUser") url = "http://92.87.91.16/backend_code/api/blue_marker/create.php";
     else if(typeOfUser === "newVolunteer") url = "http://92.87.91.16/backend_code/api/yellow_marker/create.php"
     else if(typeOfUser === "volunteer") url = "http://92.87.91.16/backend_code/api/red_marker/create.php"
 
+    //add userUniqueID to database if it doesn't exist
+    let addUIDtoDB = () =>{
+
+    }
+
     axios.post(url,
         {
             "latitude":region.latitude,
             "longitude": region.longitude,
-            "uid_user": "4"
+            "uid_user": "140" //userUniqueID
         })
         .then(res=> {
            // console.log(res.data)
@@ -42,7 +46,8 @@ let placeMarkerLogic =(region,typeOfUser)=>
 
 export default {
 
-    placeMarkerOnLocation(region,typeOfUser){
+    placeMarkerOnLocation(region, typeOfUser, userUniqueID ){
+        console.log("USER UNIQUE ID BUTTON:    ", userUniqueID)
         Alert.alert(
             "Signal Ambrosia",
             "Do you want to signal the presence of ambrosia at your location?",
@@ -52,7 +57,7 @@ export default {
                     style: "cancel"
                 },
 
-                { text: "Yes", onPress: async() => await placeMarkerLogic(region, typeOfUser) }
+                { text: "Yes", onPress: async() => await placeMarkerLogic(region, typeOfUser, userUniqueID) }
             ],
             { cancelable: false }
         );

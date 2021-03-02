@@ -4,14 +4,15 @@ import styles from '../Styles/Form.styles';
 import axios from 'axios';
 
 
-function Register()
+function Register({navigation})
 {
+
     const [firstName,setFirstName] = useState(0)
     const [lastName,setLastName] = useState(0)
     const [email,setEmail] = useState(0)
     const [phoneNumber,setPhoneNumber] = useState(0)
     const [address,setAddress] = useState(0)
-    const [password,setPassword] = useState(0);
+    const [password,setPassword] = useState(0)
     const [passwordCheck,setPasswordCheck] = useState(0)
 
     let createNewVolunteerURL= "http://92.87.91.16/backend_code/api/new_volunteer/create.php"
@@ -46,9 +47,12 @@ function Register()
                 address: address,
                 password: password
 
-            })
+            }
+
+            )
                 .then(res=> {
                     console.log(res)
+                    navigation.navigate("Maps")
                     Alert.alert(
                         "Account Created",
                         "You are now a volunteer. Welcome to our community!",
@@ -58,6 +62,7 @@ function Register()
                         ],
                         { cancelable: false }
                     );
+
                 })
                 .catch(err=> {
                     console.log(err)
