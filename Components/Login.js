@@ -1,12 +1,10 @@
 import React,{useState} from 'react';
-import {Text, View, TextInput, TouchableOpacity, Alert} from 'react-native';
+import {Text, View, TextInput, TouchableOpacity} from 'react-native';
 import styles from "../Styles/Form.styles"
-import axios from 'axios';
 import localStorage from './LocalStorage'
-
-
-let newVolunteerURL = "http://92.87.91.16/backend_code/api/new_volunteer/login.php"
-let volunteerURL = "http://92.87.91.16/backend_code/api/volunteer/login.php"
+import {useDispatch} from 'react-redux';
+import {setUserType} from  "../Redux/Actions/UserTypeAction"
+import UserType from './UserType';
 
 
 function Login({navigation})
@@ -15,53 +13,23 @@ function Login({navigation})
     const [password,setPassword] = useState(0)
 
 
-    let login = (url)=>{
+    let dispatch = useDispatch()
 
-        axios.post(url, {
-            email: email,
-            password: password
-        })
-            .then( async res => {
 
-                console.log(res.data)
+    let login = async()=>{
 
-                await localStorage.storeObjectData(
-                    "loginData", //key
-                    {email:email,password:password} // data
-                 )
+        await localStorage.storeObjectData(
+                        "loginData", //key
+                        {email:email,password:password} // data
+                     )
+            .then(
+                UserType.checkUserType()
+                    .then(res=>{
 
-                console.log("STORAGE: ", await localStorage.getObjectData("loginData"))
-                navigation.navigate("Maps")
-                //
-                // Alert.alert(
-                //     "Login Successful",
-                //     "Welcome back!",
-                //     [
-                //         { text: "OK" }
-                //     ],
-                //     { cancelable: false }
-                // );
-
-            })
-            .catch(err=> {
-                console.log(err.response.data.message)
-                if( url === newVolunteerURL && err.response.data.message === "no such volunteer found")
-                {
-                    console.log("Switched to FULL Volunteer")
-                    login(volunteerURL)
-                }
-                if(url === volunteerURL && err.response.data.message === "no such volunteer found")
-                {
-                    Alert.alert(
-                        "Error",
-                        "Incorrect email or password",
-                        [
-                            { text: "OK" }
-                        ],
-                        { cancelable: false }
-                    );
-                }
-            })
+                            dispatch(setUserType(res)) //set on redux type of volunteer
+                        navigation.navigate("Maps")
+                    })
+            )
     }
 
 
@@ -94,7 +62,7 @@ function Login({navigation})
                     style={styles.loginButton}
                     onPress={()=> {
 
-                        return login(newVolunteerURL)
+                        return login()
 
                     }}>
                     <Text style={{color:'white',fontSize: 22}}>LOGIN</Text>

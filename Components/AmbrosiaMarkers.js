@@ -1,7 +1,10 @@
 import {Marker} from "react-native-maps"
 import axios from "axios"
 import React from "react"
-import {Alert} from 'react-native'
+import {Alert,View,Text,Button} from 'react-native'
+import MarkerPanelStyle from "../Styles/MarkerPanel.styles"
+
+
 
 
 let markerPlacedAnswerAlert =(message)=>
@@ -44,7 +47,25 @@ let placeMarkerLogic =(region, typeOfUser, userUniqueID)=>{
         })
 }
 
+let    onMarkerPressPanel=()=>{
+    console.log("MARKER PRESSED")
+    return (
+        <View style={MarkerPanelStyle.container}>
+            <Button title='Show panel' onPress={() => this._panel.show()} />
+            <SlidingUpPanel ref={c => this._panel = c}>
+                <View style={MarkerPanelStyle.container}>
+                    <Text>Here is the content inside panel</Text>
+                    <Button title='Hide' onPress={() => this._panel.hide()} />
+                </View>
+            </SlidingUpPanel>
+        </View>
+    )
+}
+
+
+
 export default {
+
 
     placeMarkerOnLocation(region, typeOfUser, userUniqueID ){
         console.log("USER UNIQUE ID BUTTON:    ", userUniqueID)
@@ -94,16 +115,23 @@ export default {
  showMarkers(markersArr, color)
   {
 
-     return  markersArr.map(marker => (
-          <Marker
-              key={marker.ID}
-              coordinate={marker.coordinate}
-              title={marker.title}
-              description={marker.description}
-              pinColor={color}
-          />
+     return (
 
-      ))
+         markersArr.map(marker => (
+             <Marker
+                 key={marker.ID}
+                 coordinate={marker.coordinate}
+                 title={marker.title}
+                 description={marker.description}
+                 pinColor={color}
+                 onPress={()=>{}}
+             >
+
+             </Marker>
+
+         ))
+
+     )
 
   }
 

@@ -11,12 +11,12 @@ import Header from './Header';
 import Login from './Login';
 import Register from './Register';
 import SplashScreen from './SplashScreen';
-import userType from './UserType'
 import localStorage from './LocalStorage';
 import {Avatar} from 'react-native-elements';
-import LocalStorage from './LocalStorage';
 
 
+import {useSelector, useDispatch} from 'react-redux';
+import {setUserType} from  "../Redux/Actions/UserTypeAction"
 
 
 const Drawer = createDrawerNavigator()
@@ -43,54 +43,38 @@ let Router= ()=> {
 
   //  const isOpen: boolean = useIsDrawerOpen()
 
+    let selector = useSelector(state =>state.uT.userType)
+    let dispatch = useDispatch()
 
     useEffect(()=>{
        //this is for SplashScreen; Choose here how much time you want to last after component mounted
 
-        let x=async()=>{
-            return await userType.checkUserType()
-        }
-        x().then((res) => {
-            console.log("RES IS:   ",res)
-            setUserTypeCheck(res);
-        })
+        console.log("REDUX DSFSDFDGSDGDG%REGRG with THUNK: ", selector)
 
-        let y= async()=>{
-            let z = await localStorage.getObjectData("loginData")
-            console.log("THIS IS Z: ",z)
-            return z.email
-        }
 
-        y().then(
-            res=>setEmail(res)
-        )
+        setUserTypeCheck(selector)
+        periodicEmailCheck()
+
+
 
 
        setTimeout(()=> setIsMounted(true), 1000)
 
-        periodicUserCheck()
+
 
      //  console.log(isMounted)
 
 
-    },[])
+    },[selector])
 
-    let periodicUserCheck=async()=>{
+    let periodicEmailCheck=async()=>{
 
-        let x = await LocalStorage.getStringData("userType")
         let ld = await localStorage.getObjectData("loginData")
         let em = await ld.email
-        console.log("HERE: ", x,"   ",em)
-        if(em!== "")
-        {
-            setUserTypeCheck(x)
-            if(em!== undefined)
-            setEmail(em)
+      //  console.log("HERE: ", x,"   ",em)
+        if(selector !== 'normalUser') {setEmail(em)}
+        else { setEmail("")}
 
-        }
-
-
-        setTimeout(periodicUserCheck,3 * 1000)
     }
 
     let userHelloAndLogout=(props)=>{
@@ -113,7 +97,9 @@ let Router= ()=> {
                 { userTypeCheck !== "normalUser" &&
                 <DrawerItem label={"Logout"} onPress={()=>{
                     setEmail("")
-                    setUserTypeCheck("normalUser")
+
+                    //setUserTypeCheck("normalUser")
+                    dispatch(setUserType("normalUser"))
                     localStorage.storeObjectData(
                         "loginData", //key
                         {email:"",password:""} // data

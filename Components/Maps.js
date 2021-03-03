@@ -1,19 +1,14 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {
-    StyleSheet,
-    View,
-} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 
-import MapView,{PROVIDER_GOOGLE} from "react-native-maps";
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import Localization from './Localization';
 import AmbrosiaMarkers from './AmbrosiaMarkers';
 import MapsButtons from './MapsButtons';
 import DeviceInfo from './DeviceInfo';
 import Notifications from './Notifications';
-import userType from './UserType'
 import {useFocusEffect} from '@react-navigation/native';
-import {useIsDrawerOpen} from '@react-navigation/drawer';
-import LocalStorage from './LocalStorage';
+import {useSelector} from 'react-redux';
 
 
 const getRedMarkersUrl = "http://92.87.91.16/backend_code/api/red_marker/read.php"
@@ -23,6 +18,8 @@ const getYellowMarkersUrl = "http://92.87.91.16/backend_code/api/yellow_marker/r
 
 function Maps()
 {
+
+
     const [region, setRegion] = useState({
         latitude: 51.5079145,
         longitude: -0.0899163,
@@ -32,6 +29,10 @@ function Maps()
 
     const [redMarkersState,setRedMarkersState] = useState([])
     const [yellowMarkersState,setYellowMarkersState] = useState([])
+
+
+    let selector = useSelector(state =>state.uT.userType)
+
 
     let mapRef = useRef()
 
@@ -45,6 +46,8 @@ function Maps()
             Localization.getCurrentPos((r)=> setRegion(r))
 
             updateMarkers()
+
+            console.log("SELECTOR IN MAPS IS:   ", selector)
 
         }
         else {
@@ -65,11 +68,8 @@ function Maps()
             let x = async()=>{
 
                 //focused
-                let uT = await userType.checkUserType()
-                await LocalStorage.storeStringData("userType",uT)
-                alert("User type:" + uT)
                await updateMarkers()
-                console.log("SDASDAA",uT)
+
 
             }
             x()
@@ -77,16 +77,15 @@ function Maps()
             return () => {
             //unfocused
             };
-        }, [])
+        }, [selector])
     );
 
 
 
 
-    let updateMarkers = async () => {
+    let updateMarkers =() => {
 
-        let checkUser = await userType.checkUserType()
-        if (checkUser === "volunteer") {
+        if (selector === "volunteer") {
             AmbrosiaMarkers.getMarkers(getYellowMarkersUrl, (sms) => setYellowMarkersState(sms))
         } else {
             setYellowMarkersState([])
@@ -99,6 +98,7 @@ function Maps()
 
     return (
     <View style = {{height: '100%'}}>
+
         <MapView
             ref={mapRef}
             style={{...StyleSheet.absoluteFillObject}}
@@ -111,10 +111,12 @@ function Maps()
             {AmbrosiaMarkers.showMarkers(yellowMarkersState, 'yellow')}
         </MapView>
 
+
+
         {MapsButtons.addMarkerButton(async ()=>
-            AmbrosiaMarkers.placeMarkerOnLocation(
+                AmbrosiaMarkers.placeMarkerOnLocation(
                 region,
-                await userType.checkUserType(),
+                selector, //user type
                 await DeviceInfo.getDeviceUniqueId()
             ))}
 
