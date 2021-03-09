@@ -14,6 +14,7 @@ export default{
         let volStat =  await checkIfValidVolunteer()
         if( dInfo!== "undefined" &&  (volStat === null || volStat === undefined)) return "normalUser"
         else return volStat
+      
 
             },
 }

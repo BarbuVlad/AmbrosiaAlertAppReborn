@@ -124,7 +124,7 @@ export default {
                  title={marker.title}
                  description={marker.description}
                  pinColor={color}
-                 onPress={()=>{}}
+                 onPress={()=>{}}  //deschide panoul
              >
 
              </Marker>

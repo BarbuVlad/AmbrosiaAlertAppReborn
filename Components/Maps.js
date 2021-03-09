@@ -9,7 +9,7 @@ import DeviceInfo from './DeviceInfo';
 import Notifications from './Notifications';
 import {useFocusEffect} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
-
+import MapsFeedBackPanel from "./MapsFeedbackPanel"
 
 const getRedMarkersUrl = "http://92.87.91.16/backend_code/api/red_marker/read.php"
 const getYellowMarkersUrl = "http://92.87.91.16/backend_code/api/yellow_marker/read.php"
@@ -122,6 +122,9 @@ function Maps()
 
         {mapRef.current &&  MapsButtons.showMyLocationButton(async()=>
             await mapRef.current.animateToRegion(region))}
+
+
+      {MapsFeedBackPanel()}
 
 
     </View>
