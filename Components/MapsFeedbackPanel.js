@@ -1,14 +1,15 @@
-import React, { useRef } from "react";
-import { View, Text, Pressable } from "react-native";
+import React, { useRef,} from "react";
+import { View, Text,} from "react-native";
 import RBSheet from "react-native-raw-bottom-sheet";
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import "./globals"
 
-//refRBSheet.current.open() deschidere panou
+
 
 let mapsFeedbackPanel =()=>{
-  let x =1
-  const refRBSheet = useRef();
+
+   global.refRBSheet = useRef();
   return (
     <View
       style={{
@@ -18,17 +19,20 @@ let mapsFeedbackPanel =()=>{
         backgroundColor: "#000"
       }}
     >
-      {x===1 && refRBSheet.current.open()}
+
+
       <RBSheet
         ref={refRBSheet}
         closeOnDragDown={true}
         closeOnPressMask={true}
+        openDuration={250}
+
         customStyles={{
           wrapper: {
             backgroundColor: "transparent"
           },
           draggableIcon: {
-            backgroundColor: "#000"
+            backgroundColor: "#06beb2"
           },
           container:{
             borderTopLeftRadius:30,
@@ -41,10 +45,11 @@ let mapsFeedbackPanel =()=>{
         <View style={{flexDirection:'row',justifyContent:'space-evenly',}}>
 
             <Button
+              onPress={() => {refRBSheet.current.close()}}
               buttonStyle={{
                 paddingHorizontal:30,
                 paddingVertical: 20,
-                backgroundColor:'green',
+                backgroundColor:'#06beb6',
                 // marginRight:20,
                 borderRadius:30,
 
@@ -60,14 +65,12 @@ let mapsFeedbackPanel =()=>{
 
 
             <Button
+              onPress={() => {refRBSheet.current.close()}}
               buttonStyle={{
                 paddingHorizontal:30,
                 paddingVertical: 20,
-                backgroundColor:'red',
-                //  marginRight:20,
+                backgroundColor:'#48b1bf',
                 borderRadius:30,
-
-
 
               }}
               icon={

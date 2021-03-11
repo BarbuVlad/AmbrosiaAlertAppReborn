@@ -1,9 +1,10 @@
 import {Marker} from "react-native-maps"
 import axios from "axios"
 import React from "react"
-import {Alert,View,Text,Button} from 'react-native'
+import {Alert} from 'react-native'
 import MarkerPanelStyle from "../Styles/MarkerPanel.styles"
 
+import "./globals"
 
 
 
@@ -47,20 +48,6 @@ let placeMarkerLogic =(region, typeOfUser, userUniqueID)=>{
         })
 }
 
-let    onMarkerPressPanel=()=>{
-    console.log("MARKER PRESSED")
-    return (
-        <View style={MarkerPanelStyle.container}>
-            <Button title='Show panel' onPress={() => this._panel.show()} />
-            <SlidingUpPanel ref={c => this._panel = c}>
-                <View style={MarkerPanelStyle.container}>
-                    <Text>Here is the content inside panel</Text>
-                    <Button title='Hide' onPress={() => this._panel.hide()} />
-                </View>
-            </SlidingUpPanel>
-        </View>
-    )
-}
 
 
 
@@ -111,6 +98,8 @@ export default {
         await   setMarkersState(markersData)
    },
 
+  setPanelData(op = 0){return op},
+
 
  showMarkers(markersArr, color)
   {
@@ -124,12 +113,23 @@ export default {
                  title={marker.title}
                  description={marker.description}
                  pinColor={color}
-                 onPress={()=>{}}  //deschide panoul
+                 onPress={()=>{
+                   let payloadMarkerData ={
+                     coordinate: marker.coordinate,
+                     additionalMarkerData: { title: "none", description: "none" }
+                   }
+
+                  setTimeout(()=>{refRBSheet.current.open()},450)
+
+
+
+                 }}  //deschide panoul
              >
 
              </Marker>
 
          ))
+
 
      )
 

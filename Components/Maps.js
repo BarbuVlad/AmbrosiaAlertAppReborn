@@ -34,7 +34,8 @@ function Maps()
     let selector = useSelector(state =>state.uT.userType)
 
 
-    let mapRef = useRef()
+
+    global.mapRef = useRef()
 
     const mounted = useRef()
      useEffect(()  => {
@@ -125,6 +126,7 @@ function Maps()
 
 
       {MapsFeedBackPanel()}
+
 
 
     </View>

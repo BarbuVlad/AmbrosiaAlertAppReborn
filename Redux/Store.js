@@ -3,8 +3,10 @@ import thunk from 'redux-thunk';
 import {userTypeReducer} from "./Reducers/UserTypeReducer"
 
 
+
 const rootReducer = combineReducers({
-     uT: userTypeReducer
+     uT: userTypeReducer,
+
 
 })
 
