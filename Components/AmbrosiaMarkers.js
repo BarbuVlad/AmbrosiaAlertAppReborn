@@ -114,9 +114,9 @@ export default {
                  description={marker.description}
                  pinColor={color}
                  onPress={()=>{
-                   let payloadMarkerData ={
+                   global.pressedMarkerCoordinate ={
                      coordinate: marker.coordinate,
-                     additionalMarkerData: { title: "none", description: "none" }
+
                    }
 
                   setTimeout(()=>{refRBSheet.current.open()},450)

@@ -14,7 +14,7 @@ export default{
         let volStat =  await checkIfValidVolunteer()
         if( dInfo!== "undefined" &&  (volStat === null || volStat === undefined)) return "normalUser"
         else return volStat
-      
+
 
             },
 }
@@ -55,14 +55,14 @@ let checkIfValidVolunteer = async (url = newVolunteerURL)=>{
 
         })
         .catch(err=> {
-          //  console.log(err.response.data.message)
-            if( url === newVolunteerURL && err.response.data.message === "no such volunteer found")
+            console.log("Rsjkfhskjfhsdjkdsgfk: ", err.response.data.message)
+            if( url === newVolunteerURL && err.response.data.message === "no such new_volunteer found")
             {
 
-              //  console.log("Switched to FULL Volunteer request")
+                console.log("new vol url RES: ", err.response.data.message)
                 return checkIfValidVolunteer(volunteerURL)
             }
-            if(url === volunteerURL && err.response.data.message === "no such volunteer found")
+            if(url === volunteerURL && err.response.data.message === "no_such_volunteer_found")
             {
                // console.log("THERE IS NO VOLUNTEER WITH THIS DATA,Data")
 
