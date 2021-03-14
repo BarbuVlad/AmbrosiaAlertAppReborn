@@ -78,7 +78,9 @@ export default {
         let markerID = 0
         await axios.get(url)
             .then(res=>{
+
                 for (let i = 0; i < res.data.data.length; i++) {
+                  console.log("MARKERS RES IS:",res.data.data[i])
                     markerID++;
                     const newMarker = {
                         'ID':markerID,
@@ -87,10 +89,12 @@ export default {
                                 'latitude':parseFloat(res.data.data[i].latitude)  ,
                                 'longitude':parseFloat(res.data.data[i].longitude) ,
 
-                            }
+                            },
+                         'emailVolunteer': res.data.data[i].email_volunteer
                     }
 
                     markersData.push(newMarker)
+                //  console.log(markersData)
 
                 }
 
@@ -112,12 +116,20 @@ export default {
                  coordinate={marker.coordinate}
                  title={marker.title}
                  description={marker.description}
+                 emailVolunteer = {marker.emailVolunteer}
                  pinColor={color}
                  onPress={()=>{
-                   global.pressedMarkerCoordinate ={
+                   // global.pressedMarkerCoordinate ={
+                   //   coordinate: marker.coordinate,
+                   //
+                   // }
+                   global.pressedMarkerData ={
                      coordinate: marker.coordinate,
-
+                     emailVolunteer: marker.emailVolunteer,
+                     markerColor: color
                    }
+                 console.log("MARKER VOL:", marker.emailVolunteer)
+                   console.log("Marker Color:",color)
 
                   setTimeout(()=>{refRBSheet.current.open()},450)
 

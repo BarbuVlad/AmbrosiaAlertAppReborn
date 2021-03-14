@@ -10,6 +10,7 @@ import DeviceInfo from "./DeviceInfo";
 import localStorage from "./LocalStorage";
 
 
+
 let checkIfUserExist = async()=>{
   let rtnValue = 0
   let vendorId = await DeviceInfo.getDeviceUniqueId()
@@ -19,7 +20,7 @@ let checkIfUserExist = async()=>{
 
   await axios.get(checkUserUrl)
     .then(
-      res=>{console.log(res)
+      res=>{
         rtnValue = res.data.message
       })
     .catch(err=>{
@@ -35,7 +36,7 @@ let sendFeedbackToServer = async(feedbackUrl, requestStructure)=>{
       console.log("REZULTAT TRIMIS PE SERVER ",res.data.message)
     })
     .catch(err=>{
-      console.log(err)
+      console.log("Error is: ", err)
       console.log("requst structure ", requestStructure)
       console.log("requst URL: ",feedbackUrl)
     });
@@ -48,7 +49,7 @@ let mapsFeedbackPanel =()=>{
    let selector = useSelector(state => state.uT.userType)
 
 
-   let feedbackRequest = async(pressedMarkerCoordinate, feedbackType)=>{
+   let feedbackRequest = async(pressedMarkerData, feedbackType)=>{
      let feedBackUrl
      let requestStructure
      let email
@@ -56,16 +57,14 @@ let mapsFeedbackPanel =()=>{
      if(loginDataFromStorage !== null){ email =  loginDataFromStorage.email}
      let vID = await DeviceInfo.getDeviceUniqueId()
 
-     console.log("IF USER EXIST:  ", await checkIfUserExist())
-
 
      if(selector === "normalUser"){
         feedBackUrl = "http://92.87.91.16/backend_code/api/feedback/user.php"
         requestStructure={
 
           "vendor_id": vID,
-          "longitude": pressedMarkerCoordinate.coordinate.longitude,
-          "latitude": pressedMarkerCoordinate.coordinate.latitude,
+          "longitude": pressedMarkerData.coordinate.longitude,
+          "latitude": pressedMarkerData.coordinate.latitude,
           "type": feedbackType
 
         }
@@ -86,32 +85,61 @@ let mapsFeedbackPanel =()=>{
               console.log(err)
 
             });
-           
+
         }
         else {
-          sendFeedbackToServer(feedBackUrl,requestStructure)
+          return sendFeedbackToServer(feedBackUrl,requestStructure)
 
         }
 
-      }
-      else if(selector === "newVolunteer" || selector === "volunteer"){
-        if(selector === "newVolunteer")
+      } else if(selector === "newVolunteer"){
          feedBackUrl = "http://92.87.91.16/backend_code/api/feedback/new_volunteer.php"
-        else if(selector === "volunteer")
-          feedBackUrl = "http://92.87.91.16/backend_code/api/feedback/volunteer.php"
-
 
         requestStructure={
 
           "email": email,
-          "longitude": pressedMarkerCoordinate.coordinate.longitude,
-          "latitude": pressedMarkerCoordinate.coordinate.latitude,
+          "longitude": pressedMarkerData.coordinate.longitude,
+          "latitude": pressedMarkerData.coordinate.latitude,
           "type": feedbackType
 
         }
-       sendFeedbackToServer(feedBackUrl,requestStructure)
+     return  sendFeedbackToServer(feedBackUrl,requestStructure)
 
       }
+
+      else if(selector === "volunteer"){
+
+        if(pressedMarkerData.markerColor === "yellow" && feedbackType === "like"){
+
+          feedBackUrl = "http://92.87.91.16/backend_code/api/yellow_marker/confirm.php"
+
+          requestStructure={
+            "longitude": pressedMarkerData.coordinate.longitude,
+            "latitude": pressedMarkerData.coordinate.latitude,
+            "email_volunteer": pressedMarkerData.emailVolunteer,
+            "email_volunteer_confirm": email
+          }
+
+        }
+        else if(pressedMarkerData.markerColor !== "yellow"){
+          feedBackUrl = "http://92.87.91.16/backend_code/api/feedback/volunteer.php"
+
+          requestStructure = {
+
+            "email": email,
+            "longitude": pressedMarkerData.coordinate.longitude,
+            "latitude": pressedMarkerData.coordinate.latitude,
+            "type": feedbackType
+
+          }
+        }
+
+
+
+      return sendFeedbackToServer(feedBackUrl,requestStructure)
+
+
+     }
 
 
 
@@ -153,7 +181,7 @@ let mapsFeedbackPanel =()=>{
 
             <Button
               onPress={() => {
-                feedbackRequest(pressedMarkerCoordinate, "like")
+                feedbackRequest(pressedMarkerData, "like")
                 refRBSheet.current.close()
 
 
@@ -162,7 +190,6 @@ let mapsFeedbackPanel =()=>{
                 paddingHorizontal:30,
                 paddingVertical: 20,
                 backgroundColor:'#06beb6',
-                // marginRight:20,
                 borderRadius:30,
 
               }}
@@ -178,7 +205,7 @@ let mapsFeedbackPanel =()=>{
 
             <Button
               onPress={() => {
-                feedbackRequest(pressedMarkerCoordinate, "dislike")
+                feedbackRequest(pressedMarkerData, "dislike")
                 refRBSheet.current.close()}
               }
               buttonStyle={{
