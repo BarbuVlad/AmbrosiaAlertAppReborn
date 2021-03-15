@@ -11,24 +11,6 @@ import localStorage from "./LocalStorage";
 
 
 
-let checkIfUserExist = async()=>{
-  let rtnValue = 0
-  let vendorId = await DeviceInfo.getDeviceUniqueId()
-  let checkUserUrl =
-    "http://92.87.91.16/backend_code/api/user/read_single.php?vendor_id="+
-    vendorId
-
-  await axios.get(checkUserUrl)
-    .then(
-      res=>{
-        rtnValue = res.data.message
-      })
-    .catch(err=>{
-      console.log("ERROR ", err)
-    })
-  return rtnValue
-}
-
 
 let sendFeedbackToServer = async(feedbackUrl, requestStructure)=>{
   await axios.post(feedbackUrl, requestStructure)
@@ -69,28 +51,6 @@ let mapsFeedbackPanel =()=>{
 
         }
 
-        let checkIfExist =  await checkIfUserExist()
-
-        if(checkIfExist === "User dose NOT exist")
-        {
-          let url = "http://92.87.91.16/backend_code/api/user/create.php"
-          await axios.post(url, { "vendor_id" : vID })
-            .then(res=>{
-              console.log("WAS USER CREATED?  ",res.data.message)
-              if(res.data.message === "User created"){
-                return sendFeedbackToServer(feedBackUrl,requestStructure)
-              }
-            })
-            .catch(err=>{
-              console.log(err)
-
-            });
-
-        }
-        else {
-          return sendFeedbackToServer(feedBackUrl,requestStructure)
-
-        }
 
       } else if(selector === "newVolunteer"){
          feedBackUrl = "http://92.87.91.16/backend_code/api/feedback/new_volunteer.php"
@@ -103,7 +63,7 @@ let mapsFeedbackPanel =()=>{
           "type": feedbackType
 
         }
-     return  sendFeedbackToServer(feedBackUrl,requestStructure)
+
 
       }
 
@@ -135,13 +95,9 @@ let mapsFeedbackPanel =()=>{
         }
 
 
-
-      return sendFeedbackToServer(feedBackUrl,requestStructure)
-
-
      }
 
-
+     return sendFeedbackToServer(feedBackUrl,requestStructure)
 
     }
 

@@ -5,6 +5,8 @@ import {Alert} from 'react-native'
 import MarkerPanelStyle from "../Styles/MarkerPanel.styles"
 
 import "./globals"
+import DeviceInfo from "./DeviceInfo";
+import localStorage from "./LocalStorage";
 
 
 
@@ -20,30 +22,52 @@ let markerPlacedAnswerAlert =(message)=>
     );
 }
 
-let placeMarkerLogic =(region, typeOfUser, userUniqueID)=>{
+let placeMarkerLogic =async(region, typeOfUser)=>{
 
     let url
-    if(typeOfUser === "normalUser") url = "http://92.87.91.16/backend_code/api/blue_marker/create.php";
-    else if(typeOfUser === "newVolunteer") url = "http://92.87.91.16/backend_code/api/yellow_marker/create.php"
-    else if(typeOfUser === "volunteer") url = "http://92.87.91.16/backend_code/api/red_marker/create.php"
+    let requestStructure
+    let vendorId = await DeviceInfo.getDeviceUniqueId()
+  let loginDataFromStorage = await localStorage.getObjectData("loginData")
+  let email = ""
 
-    //add userUniqueID to database if it doesn't exist
-    let addUIDtoDB = () =>{
+  if(loginDataFromStorage !== null){ email =  loginDataFromStorage.email}
+
+    if(typeOfUser === "normalUser") {
+      url = "http://92.87.91.16/backend_code/api/blue_marker/create.php"
+      requestStructure ={
+        "longitude": region.longitude,
+        "latitude":region.latitude,
+        "vendor_id": vendorId
+      }
 
     }
+    else if(typeOfUser === "newVolunteer") {
+      url = "http://92.87.91.16/backend_code/api/yellow_marker/create.php";
+      requestStructure = {
+        "longitude": region.longitude,
+        "latitude":region.latitude,
+        "email": email
+      }
+    }
+    else if(typeOfUser === "volunteer") {
+      url = "http://92.87.91.16/backend_code/api/red_marker/create.php";
+      requestStructure = {
+        "longitude": region.longitude,
+        "latitude":region.latitude,
+        "email_volunteer": email
+      }
+    }
 
-    axios.post(url,
-        {
-            "latitude":region.latitude,
-            "longitude": region.longitude,
-            "uid_user": "140" //userUniqueID
-        })
+
+
+
+    axios.post(url,requestStructure)
         .then(res=> {
-           // console.log(res.data)
+            console.log(res.data)
             markerPlacedAnswerAlert("Ambrosia was successfully reported at your location")
         })
         .catch(err=> {
-         //   console.log(err.message)
+            console.log(err.message)
             markerPlacedAnswerAlert("Error")
         })
 }
@@ -54,8 +78,8 @@ let placeMarkerLogic =(region, typeOfUser, userUniqueID)=>{
 export default {
 
 
-    placeMarkerOnLocation(region, typeOfUser, userUniqueID ){
-        console.log("USER UNIQUE ID BUTTON:    ", userUniqueID)
+    placeMarkerOnLocation(region, typeOfUser){
+
         Alert.alert(
             "Signal Ambrosia",
             "Do you want to signal the presence of ambrosia at your location?",
@@ -65,7 +89,7 @@ export default {
                     style: "cancel"
                 },
 
-                { text: "Yes", onPress: async() => await placeMarkerLogic(region, typeOfUser, userUniqueID) }
+                { text: "Yes", onPress: async() => await placeMarkerLogic(region, typeOfUser) }
             ],
             { cancelable: false }
         );

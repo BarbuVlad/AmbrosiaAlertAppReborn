@@ -119,7 +119,6 @@ function Maps()
                 AmbrosiaMarkers.placeMarkerOnLocation(
                 region,
                 selector, //user type
-                await DeviceInfo.getDeviceUniqueId()
             ))}
 
         {mapRef.current &&  MapsButtons.showMyLocationButton(async()=>

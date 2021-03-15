@@ -12,11 +12,55 @@ export default{
     async checkUserType(){
        let  dInfo = await DeviceInfo.getDeviceUniqueId()
         let volStat =  await checkIfValidVolunteer()
-        if( dInfo!== "undefined" &&  (volStat === null || volStat === undefined)) return "normalUser"
+        if( dInfo!== "undefined" &&  (volStat === null || volStat === undefined)) {
+          if(await checkIfUserExist() === 'User dose NOT exist') await createNewUser()
+          return "normalUser";
+        }
         else return volStat
 
 
             },
+}
+
+
+
+
+let checkIfUserExist = async()=>{
+  let vendorId = await DeviceInfo.getDeviceUniqueId()
+  let rtnValue = 0
+
+  let checkUserUrl =
+    "http://92.87.91.16/backend_code/api/user/read_single.php?vendor_id="+
+    vendorId
+
+  await axios.get(checkUserUrl)
+    .then(
+      res=>{
+        rtnValue = res.data.message
+        console.log("DOES THE USER EXIST?  ", res.data.message)
+      })
+    .catch(err=>{
+      console.log("ERROR ", err)
+    })
+  return rtnValue
+}
+
+let createNewUser=async()=>
+{
+  let vendorId = await DeviceInfo.getDeviceUniqueId()
+  let url = "http://92.87.91.16/backend_code/api/user/create.php"
+  await axios.post(url, { "vendor_id" : vendorId })
+    .then(res=>{
+      console.log("WAS USER CREATED?  ",res.data.message)
+      if(res.data.message === "User created"){
+        console.log("A NEW USER WAS CREATED")
+      }
+    })
+    .catch(err=>{
+      console.log(err)
+
+    });
+
 }
 
 let checkIfValidVolunteer = async (url = newVolunteerURL)=>{
