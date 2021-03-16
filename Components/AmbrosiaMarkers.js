@@ -1,12 +1,15 @@
 import {Marker} from "react-native-maps"
 import axios from "axios"
-import React from "react"
+import React, { useEffect } from "react";
 import {Alert} from 'react-native'
 import MarkerPanelStyle from "../Styles/MarkerPanel.styles"
 
 import "./globals"
 import DeviceInfo from "./DeviceInfo";
 import localStorage from "./LocalStorage";
+
+import {useDispatch } from "react-redux";
+import {markersShouldUpdate} from  "../Redux/Actions/MarkersShouldUpdateAction"
 
 
 
@@ -22,13 +25,15 @@ let markerPlacedAnswerAlert =(message)=>
     );
 }
 
-let placeMarkerLogic =async(region, typeOfUser)=>{
+let placeMarkerLogic =async(region, typeOfUser, updateMarkers)=>{
 
     let url
     let requestStructure
     let vendorId = await DeviceInfo.getDeviceUniqueId()
   let loginDataFromStorage = await localStorage.getObjectData("loginData")
   let email = ""
+
+
 
   if(loginDataFromStorage !== null){ email =  loginDataFromStorage.email}
 
@@ -64,7 +69,10 @@ let placeMarkerLogic =async(region, typeOfUser)=>{
     axios.post(url,requestStructure)
         .then(res=> {
             console.log(res.data)
+
             markerPlacedAnswerAlert("Ambrosia was successfully reported at your location")
+          updateMarkers()
+
         })
         .catch(err=> {
             console.log(err.message)
@@ -75,10 +83,11 @@ let placeMarkerLogic =async(region, typeOfUser)=>{
 
 
 
+
 export default {
 
 
-    placeMarkerOnLocation(region, typeOfUser){
+    placeMarkerOnLocation(region, typeOfUser,updateMarkers){
 
         Alert.alert(
             "Signal Ambrosia",
@@ -89,7 +98,7 @@ export default {
                     style: "cancel"
                 },
 
-                { text: "Yes", onPress: async() => await placeMarkerLogic(region, typeOfUser) }
+                { text: "Yes", onPress: async() => await placeMarkerLogic(region, typeOfUser, updateMarkers) }
             ],
             { cancelable: false }
         );

@@ -1,3 +1,3 @@
 export const SET_USER_TYPE = {type: SET_USER_TYPE}
-
+export const MARKERS_SHOULD_UPDATE = {type: MARKERS_SHOULD_UPDATE}
 

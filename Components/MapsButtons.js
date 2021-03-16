@@ -19,7 +19,7 @@ export default {
                     type='font-awesome-5'
                     color='#48b1bf'
                     size = {27}
-                    onPress={onButtonPress}
+                    onPress={()=>onButtonPress()}
                 />
             </View>
                 )
@@ -37,7 +37,7 @@ export default {
                     type='font-awesome-5'
                     color='#48b1bf'
                     size = {27}
-                    onPress={ onButtonPress}
+                    onPress={()=> onButtonPress()}
                 />
             </View>
             )

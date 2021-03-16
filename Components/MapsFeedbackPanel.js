@@ -5,30 +5,35 @@ import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import "./globals"
 import axios from 'axios';
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
+import {markersShouldUpdate} from  "../Redux/Actions/MarkersShouldUpdateAction"
 import DeviceInfo from "./DeviceInfo";
 import localStorage from "./LocalStorage";
 
 
 
 
-let sendFeedbackToServer = async(feedbackUrl, requestStructure)=>{
-  await axios.post(feedbackUrl, requestStructure)
-    .then(res=>{
-      console.log("REZULTAT TRIMIS PE SERVER ",res.data.message)
-    })
-    .catch(err=>{
-      console.log("Error is: ", err)
-      console.log("requst structure ", requestStructure)
-      console.log("requst URL: ",feedbackUrl)
-    });
-}
+
 
 let mapsFeedbackPanel =()=>{
 
    global.refRBSheet = useRef();
 
    let selector = useSelector(state => state.uT.userType)
+   let dispatch = useDispatch()
+
+  let sendFeedbackToServer = async(feedbackUrl, requestStructure)=>{
+    await axios.post(feedbackUrl, requestStructure)
+      .then(res=>{
+        console.log("REZULTAT TRIMIS PE SERVER ",res.data.message)
+        dispatch(markersShouldUpdate())
+      })
+      .catch(err=>{
+        console.log("Error is: ", err)
+        console.log("requst structure ", requestStructure)
+        console.log("requst URL: ",feedbackUrl)
+      });
+  }
 
 
    let feedbackRequest = async(pressedMarkerData, feedbackType)=>{

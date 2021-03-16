@@ -8,8 +8,9 @@ import MapsButtons from './MapsButtons';
 import DeviceInfo from './DeviceInfo';
 import Notifications from './Notifications';
 import {useFocusEffect} from '@react-navigation/native';
-import {useSelector} from 'react-redux';
+import {useSelector,useDispatch} from 'react-redux';
 import MapsFeedBackPanel from "./MapsFeedbackPanel"
+import {markersShouldUpdate} from  "../Redux/Actions/MarkersShouldUpdateAction"
 
 const getRedMarkersUrl = "http://92.87.91.16/backend_code/api/red_marker/read.php"
 const getYellowMarkersUrl = "http://92.87.91.16/backend_code/api/yellow_marker/read.php"
@@ -33,7 +34,9 @@ function Maps()
 
 
     let selector = useSelector(state =>state.uT.userType)
+    let updateMarkersSelector =useSelector (state=>state.updateMarkers.incrementToUpdateMarkers)
 
+    let dispatch = useDispatch()
 
 
     global.mapRef = useRef()
@@ -44,6 +47,7 @@ function Maps()
             // do componentDidMount logic
             mounted.current = true;
             console.log("Component did mount in Maps")
+          console.log("NEW CREATED SELECTOR:   ", updateMarkersSelector)
 
             Localization.getCurrentPos((r)=> setRegion(r))
 
@@ -55,12 +59,12 @@ function Maps()
         else {
             console.log("COMPONENT DID UPDATE IN MAPS")
 
-            updateMarkers( )
+            updateMarkers()
              }
 
 
 
-    },[]);
+    },[updateMarkersSelector]);
 
     useFocusEffect(
         //useFocusEffect has 2 mods:
@@ -98,6 +102,22 @@ function Maps()
 
     Notifications(region,redMarkersState)
 
+
+
+  let onAddMarkerButtonPressed = async()=>{
+   await AmbrosiaMarkers.placeMarkerOnLocation(
+      region,
+      selector, //user type
+     updateMarkers
+    )
+ console.log("REGION:   ",region)
+
+    await updateMarkers()
+
+
+  }
+
+
     return (
     <View style = {{height: '100%'}}>
 
@@ -115,11 +135,7 @@ function Maps()
 
 
 
-        {MapsButtons.addMarkerButton(async ()=>
-                AmbrosiaMarkers.placeMarkerOnLocation(
-                region,
-                selector, //user type
-            ))}
+        {MapsButtons.addMarkerButton(async ()=> onAddMarkerButtonPressed()) }
 
         {mapRef.current &&  MapsButtons.showMyLocationButton(async()=>
             await mapRef.current.animateToRegion(region))}
