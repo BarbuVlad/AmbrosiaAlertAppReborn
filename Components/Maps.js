@@ -5,15 +5,15 @@ import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import Localization from './Localization';
 import AmbrosiaMarkers from './AmbrosiaMarkers';
 import MapsButtons from './MapsButtons';
-import DeviceInfo from './DeviceInfo';
 import Notifications from './Notifications';
 import {useFocusEffect} from '@react-navigation/native';
-import {useSelector,useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 import MapsFeedBackPanel from "./MapsFeedbackPanel"
-import {markersShouldUpdate} from  "../Redux/Actions/MarkersShouldUpdateAction"
+
 
 const getRedMarkersUrl = "http://92.87.91.16/backend_code/api/red_marker/read.php"
 const getYellowMarkersUrl = "http://92.87.91.16/backend_code/api/yellow_marker/read.php"
+
 
 
 
@@ -36,7 +36,9 @@ function Maps()
     let selector = useSelector(state =>state.uT.userType)
     let updateMarkersSelector =useSelector (state=>state.updateMarkers.incrementToUpdateMarkers)
 
-    let dispatch = useDispatch()
+
+
+
 
 
     global.mapRef = useRef()
@@ -51,7 +53,14 @@ function Maps()
 
             Localization.getCurrentPos((r)=> setRegion(r))
 
-            updateMarkers()
+
+          updateMarkers()
+
+
+
+
+
+
 
             console.log("SELECTOR IN MAPS IS:   ", selector)
 
@@ -89,6 +98,7 @@ function Maps()
 
 
 
+
     let updateMarkers =() => {
 
         if (selector === "volunteer") {
@@ -117,18 +127,45 @@ function Maps()
 
   }
 
-
+let movingMap = 0
+  const timerRef = useRef(null);
     return (
     <View style = {{height: '100%'}}>
 
         <MapView
             ref={mapRef}
             style={{...StyleSheet.absoluteFillObject}}
-            region={region}
+            initialRegion={region}
             provider={PROVIDER_GOOGLE}
             showsUserLocation={true}
             showsMyLocationButton={false}
-            userLocationUpdateInterval={2000}>
+            userLocationUpdateInterval={2000}
+            onPanDrag={()=> {
+              if (timerRef.current) {
+                clearTimeout(timerRef.current);
+              }
+              movingMap = 1
+            }}
+            onRegionChangeComplete={()=> {
+
+            }}
+
+             onUserLocationChange={()=> {
+              console.log(movingMap)
+              if(movingMap === 1)
+              {
+                timerRef.current = setTimeout(()=> {
+                  mapRef.current.animateToRegion(region, 1000);
+                  movingMap = 0
+                },5*1000)
+
+
+              }
+              else{
+                mapRef.current.animateToRegion(region, 1000)
+              }
+
+            }}>
             {AmbrosiaMarkers.showMarkers(redMarkersState, 'red')}
             {AmbrosiaMarkers.showMarkers(yellowMarkersState, 'yellow')}
         </MapView>
