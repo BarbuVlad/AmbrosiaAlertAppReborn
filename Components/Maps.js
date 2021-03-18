@@ -54,7 +54,8 @@ function Maps()
             Localization.getCurrentPos((r)=> setRegion(r))
 
 
-          updateMarkers()
+
+        //  setInterval(()=>updateMarkers(),2000)
 
 
 
@@ -122,60 +123,40 @@ function Maps()
     )
  console.log("REGION:   ",region)
 
-    await updateMarkers()
+
 
 
   }
+  let intervalId
+   let onShowMyLocationButtonPressed=async()=>{
+   //   console.log("!!!!!!!!!!!!!!!!!",mapRef.current)
+     // intervalId = setInterval(()=>(mapRef.current.animateToRegion(region)),1000)
+     await mapRef.current.animateToRegion(region)
+   }
 
-let movingMap = 0
-  const timerRef = useRef(null);
+
+
     return (
     <View style = {{height: '100%'}}>
 
-        <MapView
-            ref={mapRef}
-            style={{...StyleSheet.absoluteFillObject}}
-            initialRegion={region}
-            provider={PROVIDER_GOOGLE}
-            showsUserLocation={true}
-            showsMyLocationButton={false}
-            userLocationUpdateInterval={2000}
-            onPanDrag={()=> {
-              if (timerRef.current) {
-                clearTimeout(timerRef.current);
-              }
-              movingMap = 1
-            }}
-            onRegionChangeComplete={()=> {
-
-            }}
-
-             onUserLocationChange={()=> {
-              console.log(movingMap)
-              if(movingMap === 1)
-              {
-                timerRef.current = setTimeout(()=> {
-                  mapRef.current.animateToRegion(region, 1000);
-                  movingMap = 0
-                },5*1000)
-
-
-              }
-              else{
-                mapRef.current.animateToRegion(region, 1000)
-              }
-
-            }}>
-            {AmbrosiaMarkers.showMarkers(redMarkersState, 'red')}
-            {AmbrosiaMarkers.showMarkers(yellowMarkersState, 'yellow')}
-        </MapView>
+      <MapView
+        ref={mapRef}
+        style={{...StyleSheet.absoluteFillObject}}
+        region={region}
+        provider={PROVIDER_GOOGLE}
+        showsUserLocation={true}
+        showsMyLocationButton={false}
+        userLocationUpdateInterval={2000}>
+        {AmbrosiaMarkers.showMarkers(redMarkersState, 'red')}
+        {AmbrosiaMarkers.showMarkers(yellowMarkersState, 'yellow')}
+      </MapView>
 
 
 
         {MapsButtons.addMarkerButton(async ()=> onAddMarkerButtonPressed()) }
 
         {mapRef.current &&  MapsButtons.showMyLocationButton(async()=>
-            await mapRef.current.animateToRegion(region))}
+          onShowMyLocationButtonPressed())}
 
 
       {MapsFeedBackPanel()}

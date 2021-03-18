@@ -13,6 +13,7 @@ import Register from './Register';
 import SplashScreen from './SplashScreen';
 import localStorage from './LocalStorage';
 import {Avatar} from 'react-native-elements';
+import UsersStandpoint from "./UsersStandpoint"
 
 
 import {useSelector, useDispatch} from 'react-redux';
@@ -136,12 +137,14 @@ let Router= ()=> {
                                     <Drawer.Screen name="Maps" component={MapsRoute}/>
                                     <Drawer.Screen name="Login" component={Login} />
                                     <Drawer.Screen name="Register" component={Register}/>
+                                    <Drawer.Screen name="Your Feedback" component={UsersStandpoint}/>
 
                                 </>
 
                             ):(
                                 <>
                                     <Drawer.Screen styles ={{}} name="Maps" component={MapsRoute}/>
+                                    <Drawer.Screen name="Your Feedback" component={UsersStandpoint}/>
 
                                 </>
 

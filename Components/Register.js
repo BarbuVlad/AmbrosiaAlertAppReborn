@@ -1,19 +1,21 @@
 import React, {useState} from 'react';
-import {Alert, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import { Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from '../Styles/Form.styles';
 import axios from 'axios';
+
+
 
 
 function Register({navigation})
 {
 
-    const [firstName,setFirstName] = useState(0)
-    const [lastName,setLastName] = useState(0)
-    const [email,setEmail] = useState(0)
-    const [phoneNumber,setPhoneNumber] = useState(0)
-    const [address,setAddress] = useState(0)
-    const [password,setPassword] = useState(0)
-    const [passwordCheck,setPasswordCheck] = useState(0)
+    const [firstName,setFirstName] = useState("")
+    const [lastName,setLastName] = useState("")
+    const [email,setEmail] = useState("")
+    const [phoneNumber,setPhoneNumber] = useState("")
+    const [address,setAddress] = useState("")
+    const [password,setPassword] = useState("")
+    const [passwordCheck,setPasswordCheck] = useState("")
 
     let createNewVolunteerURL= "http://92.87.91.16/backend_code/api/new_volunteer/create.php"
 
@@ -37,6 +39,7 @@ function Register({navigation})
     }
 
     let createNewVolunteer= ()=>{
+
         if(passwordMatch())
         {
             axios.post(createNewVolunteerURL, {
@@ -51,6 +54,15 @@ function Register({navigation})
 
             )
                 .then(res=> {
+
+                    setFirstName("")
+                    setLastName("")
+                    setEmail("")
+                    setPhoneNumber("")
+                    setAddress("")
+                    setPassword("")
+                    setPasswordCheck("")
+
                     console.log(res)
                     navigation.navigate("Maps")
                     Alert.alert(
@@ -81,6 +93,7 @@ function Register({navigation})
     }
 
     return(
+      <ScrollView>
         <View style = {styles.container}>
 
 
@@ -92,6 +105,7 @@ function Register({navigation})
                     placeholder="First Name"
                     placeholderTextColor="#BEBEBE"
                     onChangeText={text => setFirstName(text)}
+                    value={firstName}
                 />
             </View>
 
@@ -101,6 +115,7 @@ function Register({navigation})
                     placeholder="Last Name"
                     placeholderTextColor="#BEBEBE"
                     onChangeText={text => setLastName(text)}
+                    value={lastName}
                 />
             </View>
 
@@ -110,6 +125,7 @@ function Register({navigation})
                     placeholder="Email"
                     placeholderTextColor="#BEBEBE"
                     onChangeText={text => setEmail(text)}
+                    value={email}
                 />
             </View>
 
@@ -119,6 +135,7 @@ function Register({navigation})
                     placeholder="Phone Number"
                     placeholderTextColor="#BEBEBE"
                     onChangeText={text => setPhoneNumber(text)}
+                    value={phoneNumber}
                 />
             </View>
 
@@ -128,6 +145,7 @@ function Register({navigation})
                     placeholder="Address"
                     placeholderTextColor="#BEBEBE"
                     onChangeText={text => setAddress(text)}
+                    value={address}
                 />
             </View>
 
@@ -138,6 +156,7 @@ function Register({navigation})
                     placeholderTextColor="#BEBEBE"
                     secureTextEntry={true}
                     onChangeText={text => setPassword(text)}
+                    value={password}
                 />
             </View>
 
@@ -148,6 +167,7 @@ function Register({navigation})
                     placeholderTextColor="#BEBEBE"
                     secureTextEntry={true}
                     onChangeText={text => setPasswordCheck(text)}
+                    value={passwordCheck}
                 />
             </View>
 
@@ -159,6 +179,7 @@ function Register({navigation})
             </TouchableOpacity>
 
         </View>
+        </ScrollView>
     )
 }
 
