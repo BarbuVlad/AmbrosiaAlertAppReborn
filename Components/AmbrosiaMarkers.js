@@ -1,15 +1,10 @@
 import {Marker} from "react-native-maps"
 import axios from "axios"
-import React, { useEffect } from "react";
+import React from "react";
 import {Alert} from 'react-native'
-import MarkerPanelStyle from "../Styles/MarkerPanel.styles"
-
-import "./globals"
 import DeviceInfo from "./DeviceInfo";
 import localStorage from "./LocalStorage";
 
-import {useDispatch } from "react-redux";
-import {markersShouldUpdate} from  "../Redux/Actions/MarkersShouldUpdateAction"
 
 
 
@@ -106,14 +101,14 @@ export default {
     },
 
 
-  async getMarkers(url,setMarkersState) {
+  async getMarkers(url, setMarkersState) {
         let markersData = []
         let markerID = 0
         await axios.get(url)
             .then(res=>{
 
                 for (let i = 0; i < res.data.data.length; i++) {
-                  console.log("MARKERS RES IS:",res.data.data[i])
+                //  console.log("MARKERS RES IS:",res.data.data[i])
                     markerID++;
                     const newMarker = {
                         'ID':markerID,
@@ -132,7 +127,11 @@ export default {
                 }
 
             })
-        await   setMarkersState(markersData)
+
+
+    await setMarkersState(markersData)
+
+
    },
 
   setPanelData(op = 0){return op},

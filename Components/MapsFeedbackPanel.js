@@ -74,9 +74,12 @@ let mapsFeedbackPanel =()=>{
 
       else if(selector === "volunteer"){
 
-        if(pressedMarkerData.markerColor === "yellow" && feedbackType === "like"){
+        if(pressedMarkerData.markerColor === "yellow"){
 
+          if(feedbackType === "like")
           feedBackUrl = "http://92.87.91.16/backend_code/api/yellow_marker/confirm.php"
+          else if(feedbackType === "dislike")
+          feedBackUrl = "http://92.87.91.16/backend_code/api/yellow_marker/infirm.php"
 
           requestStructure={
             "longitude": pressedMarkerData.coordinate.longitude,
@@ -86,6 +89,7 @@ let mapsFeedbackPanel =()=>{
           }
 
         }
+
         else if(pressedMarkerData.markerColor !== "yellow"){
           feedBackUrl = "http://92.87.91.16/backend_code/api/feedback/volunteer.php"
 

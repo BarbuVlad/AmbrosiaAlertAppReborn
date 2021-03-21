@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import {SafeAreaView, Text, View} from 'react-native';
 import {
-    createDrawerNavigator, createSwitchNavigator,
+    createDrawerNavigator,
     DrawerContentScrollView, DrawerItem,
-    DrawerItemList, useIsDrawerOpen,
+    DrawerItemList,
 } from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 import Maps from './Maps';
@@ -41,6 +41,7 @@ let Router= ()=> {
     const[isMounted,setIsMounted] = useState(false)
     const[userTypeCheck,setUserTypeCheck] = useState("")
     const[email,setEmail] = useState("")
+  const[showSS,setShowSS] = useState(true)
 
   //  const isOpen: boolean = useIsDrawerOpen()
 
@@ -55,6 +56,8 @@ let Router= ()=> {
 
         setUserTypeCheck(selector)
         periodicEmailCheck()
+
+
 
 
 
@@ -116,7 +119,7 @@ let Router= ()=> {
     }
 
 
-    if(isMounted === false)
+    if(isMounted=== false)
     {
 
        return <SplashScreen/>

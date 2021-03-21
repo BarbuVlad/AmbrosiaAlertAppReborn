@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { Text, TextInput, View, StyleSheet, TouchableOpacity } from "react-native";
+import { Text, TextInput, View, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import externalStyles from "../Styles/Form.styles"
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
+import axios from "axios";
 
 
-
-
-
+let standpointUrl= "http://92.87.91.16/backend_code/api/user_review/send_review.php"
 
 function usersStandpoint({navigation}){
 
@@ -20,10 +19,24 @@ function usersStandpoint({navigation}){
 
 let sendStandpointToServer=()=>{
 
-    setTitle("")
-    setName("")
-    setStandpoint("")
-    navigation.navigate("Maps")
+    axios.post(standpointUrl,{
+      "name": name,
+      "title": title,
+      "body": standpoint
+    })
+      .then(()=>{
+        Alert.alert("Thank you for feedback")
+        setTitle("")
+        setName("")
+        setStandpoint("")
+        navigation.navigate("Maps")
+        }).
+      catch(()=>{
+        Alert.alert("Failed to send")
+
+    })
+
+
 
 }
 
@@ -54,7 +67,7 @@ let sendStandpointToServer=()=>{
         <TextInput
           multiline={true}
           style={styles.feedbackTextField}
-          placeholder="Write here your feedback"
+          placeholder="Write here your feedback(10.000 letters max)"
           placeholderTextColor="#BEBEBE"
           onChangeText={text => setStandpoint(text)}
           value={standpoint}

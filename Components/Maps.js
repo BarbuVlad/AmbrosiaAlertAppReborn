@@ -15,7 +15,7 @@ const getRedMarkersUrl = "http://92.87.91.16/backend_code/api/red_marker/read.ph
 const getYellowMarkersUrl = "http://92.87.91.16/backend_code/api/yellow_marker/read.php"
 
 
-
+let shouldFollowUser = true;
 
 
 function Maps()
@@ -51,15 +51,8 @@ function Maps()
             console.log("Component did mount in Maps")
           console.log("NEW CREATED SELECTOR:   ", updateMarkersSelector)
 
-            Localization.getCurrentPos((r)=> setRegion(r))
-
-
-
-        //  setInterval(()=>updateMarkers(),2000)
-
-
-
-
+         //   Localization.getCurrentPos((r) => setRegion(r))
+            setInterval(()=>updateMarkers(),2000)
 
 
 
@@ -97,21 +90,25 @@ function Maps()
     );
 
 
-
+  //Notifications(region,redMarkersState)
 
 
     let updateMarkers =() => {
 
         if (selector === "volunteer") {
-            AmbrosiaMarkers.getMarkers(getYellowMarkersUrl, (sms) => setYellowMarkersState(sms))
+            AmbrosiaMarkers.getMarkers(
+              getYellowMarkersUrl,
+              (sms) => setYellowMarkersState(sms))
         } else {
             setYellowMarkersState([])
         }
-        AmbrosiaMarkers.getMarkers(getRedMarkersUrl, (sms) => setRedMarkersState(sms))
+        AmbrosiaMarkers.getMarkers(
+          getRedMarkersUrl,
+          (sms) => setRedMarkersState(sms))
 
     }
 
-    Notifications(region,redMarkersState)
+
 
 
 
@@ -127,14 +124,22 @@ function Maps()
 
 
   }
-  let intervalId
+
+
    let onShowMyLocationButtonPressed=async()=>{
-   //   console.log("!!!!!!!!!!!!!!!!!",mapRef.current)
-     // intervalId = setInterval(()=>(mapRef.current.animateToRegion(region)),1000)
+     shouldFollowUser = true
      await mapRef.current.animateToRegion(region)
    }
 
 
+let followUserLocation=({nativeEvent})=>{
+    console.log("COORDINATE: ", nativeEvent.coordinate)
+    let reg = nativeEvent.coordinate
+    reg.latitudeDelta =  0.01
+    reg.longitudeDelta = 0.01
+    setRegion(reg)
+    mapRef.current.animateToRegion(region)
+}
 
     return (
     <View style = {{height: '100%'}}>
@@ -142,11 +147,13 @@ function Maps()
       <MapView
         ref={mapRef}
         style={{...StyleSheet.absoluteFillObject}}
-        region={region}
+        initialRegion={region}
         provider={PROVIDER_GOOGLE}
         showsUserLocation={true}
         showsMyLocationButton={false}
-        userLocationUpdateInterval={2000}>
+        userLocationUpdateInterval={2000}
+        onUserLocationChange={(event)=>shouldFollowUser && followUserLocation(event)}
+        onPanDrag={()=>shouldFollowUser = false}>
         {AmbrosiaMarkers.showMarkers(redMarkersState, 'red')}
         {AmbrosiaMarkers.showMarkers(yellowMarkersState, 'yellow')}
       </MapView>
