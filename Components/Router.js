@@ -7,7 +7,6 @@ import {
 } from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 import Maps from './Maps';
-import Header from './Header';
 import Login from './Login';
 import Register from './Register';
 import SplashScreen from './SplashScreen';
@@ -18,6 +17,7 @@ import UsersStandpoint from "./UsersStandpoint"
 
 import {useSelector, useDispatch} from 'react-redux';
 import {setUserType} from  "../Redux/Actions/UserTypeAction"
+import Localization from "./Localization";
 
 
 const Drawer = createDrawerNavigator()
@@ -26,10 +26,10 @@ const Drawer = createDrawerNavigator()
 let MapsRoute = ({navigation}) =>{
      return(
 
-        <View>
-            <Header navigation={navigation}/>
-            <Maps/>
-        </View >
+
+
+            <Maps navigation={navigation}/>
+
 
      )
 }
@@ -41,7 +41,7 @@ let Router= ()=> {
     const[isMounted,setIsMounted] = useState(false)
     const[userTypeCheck,setUserTypeCheck] = useState("")
     const[email,setEmail] = useState("")
-  const[showSS,setShowSS] = useState(true)
+  const[showSplash,setShowSplash] = useState(true)
 
   //  const isOpen: boolean = useIsDrawerOpen()
 
@@ -58,11 +58,9 @@ let Router= ()=> {
         periodicEmailCheck()
 
 
+   setTimeout(() =>  Localization.getCurrentPos((x)=>setShowSplash(x)) ,1000)
 
 
-
-
-       setTimeout(()=> setIsMounted(true), 1000)
 
 
 
@@ -119,13 +117,14 @@ let Router= ()=> {
     }
 
 
-    if(isMounted=== false)
+    if(showSplash === true)
     {
-
+       console.log("showSplash ",showSplash)
        return <SplashScreen/>
 
     }
     else{
+
 
         return (
 

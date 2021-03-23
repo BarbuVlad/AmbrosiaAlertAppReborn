@@ -9,28 +9,31 @@ import Notifications from './Notifications';
 import {useFocusEffect} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import MapsFeedBackPanel from "./MapsFeedbackPanel"
+import Header from "./Header";
 
 
 const getRedMarkersUrl = "http://92.87.91.16/backend_code/api/red_marker/read.php"
 const getYellowMarkersUrl = "http://92.87.91.16/backend_code/api/yellow_marker/read.php"
 
 
-let shouldFollowUser = true;
 
 
-function Maps()
+function Maps({navigation})
 {
 
 
-    const [region, setRegion] = useState({
+    const [region, setRegion] = useState(initialRegion === null?{
         latitude: 51.5079145,
         longitude: -0.0899163,
         latitudeDelta: 0.01,
         longitudeDelta: 0.01
-    });
+
+    }: initialRegion
+    );
 
     const [redMarkersState,setRedMarkersState] = useState([])
     const [yellowMarkersState,setYellowMarkersState] = useState([])
+
 
 
     let selector = useSelector(state =>state.uT.userType)
@@ -51,12 +54,19 @@ function Maps()
             console.log("Component did mount in Maps")
           console.log("NEW CREATED SELECTOR:   ", updateMarkersSelector)
 
-         //   Localization.getCurrentPos((r) => setRegion(r))
+
             setInterval(()=>updateMarkers(),2000)
 
 
 
             console.log("SELECTOR IN MAPS IS:   ", selector)
+
+
+
+
+
+
+
 
         }
         else {
@@ -90,7 +100,7 @@ function Maps()
     );
 
 
-  //Notifications(region,redMarkersState)
+  Notifications(region,redMarkersState)
 
 
     let updateMarkers =() => {
@@ -141,10 +151,12 @@ let followUserLocation=({nativeEvent})=>{
     mapRef.current.animateToRegion(region)
 }
 
+
     return (
-    <View style = {{height: '100%'}}>
+    <View style = {{flex:1}}>
 
       <MapView
+
         ref={mapRef}
         style={{...StyleSheet.absoluteFillObject}}
         initialRegion={region}
@@ -154,10 +166,12 @@ let followUserLocation=({nativeEvent})=>{
         userLocationUpdateInterval={2000}
         onUserLocationChange={(event)=>shouldFollowUser && followUserLocation(event)}
         onPanDrag={()=>shouldFollowUser = false}>
+
         {AmbrosiaMarkers.showMarkers(redMarkersState, 'red')}
         {AmbrosiaMarkers.showMarkers(yellowMarkersState, 'yellow')}
       </MapView>
 
+      <Header navigation={navigation}/>
 
 
         {MapsButtons.addMarkerButton(async ()=> onAddMarkerButtonPressed()) }

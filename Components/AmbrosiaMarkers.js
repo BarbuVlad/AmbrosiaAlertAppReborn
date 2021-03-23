@@ -151,10 +151,7 @@ export default {
                  emailVolunteer = {marker.emailVolunteer}
                  pinColor={color}
                  onPress={()=>{
-                   // global.pressedMarkerCoordinate ={
-                   //   coordinate: marker.coordinate,
-                   //
-                   // }
+                   shouldFollowUser = false
                    global.pressedMarkerData ={
                      coordinate: marker.coordinate,
                      emailVolunteer: marker.emailVolunteer,

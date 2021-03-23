@@ -2,10 +2,10 @@ import React from 'react'
 import NotificationsSettings from './NotificationsSettings'
 import PushNotification from "react-native-push-notification";
 
-
+let notifiedMarkersList = []
 
  function Notifications(region,redMarkers) {
-    let notifiedMarkersList = []
+
    console.log("Notified marker list is:  ", notifiedMarkersList)
 
     PushNotification.createChannel(
