@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Image} from 'react-native';
-import AmbrosiaLogo from '../img/AmbLogo.png'
+import AmbrosiaLogo from '../img/AmbLogoWithNokia.png'
 
 function SplashScreen(){
 console.log("SplashScreen called")
@@ -9,7 +9,7 @@ console.log("SplashScreen called")
 
             <View style={styles.container}>
                 <Image
-                    style={{ width: 260, height:220}}
+                    style={{ width: 253, height:493, marginTop:130}}
                     source={AmbrosiaLogo}
                 />
             </View>

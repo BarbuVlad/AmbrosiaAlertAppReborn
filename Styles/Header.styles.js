@@ -13,9 +13,10 @@ export default StyleSheet.create({
     },
     img:{
         position:'relative',
-        width: 160,
-        height: 54,
+        width: 140,
+        height: 58,
         marginRight: 35,
+        marginTop:3
 
     },
     drawerButton:{
