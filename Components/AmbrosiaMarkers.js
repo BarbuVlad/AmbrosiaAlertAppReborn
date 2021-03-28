@@ -8,6 +8,7 @@ import localStorage from "./LocalStorage";
 
 
 
+
 let markerPlacedAnswerAlert =(message)=>
 {
     Alert.alert(
@@ -61,7 +62,13 @@ let placeMarkerLogic =async(region, typeOfUser, updateMarkers)=>{
 
 
 
-    axios.post(url,requestStructure)
+    axios.post(
+      url,
+      requestStructure,
+      {
+        headers: { 'Authorization': authHeader }
+      }
+    )
         .then(res=> {
             console.log(res.data)
 
@@ -104,7 +111,9 @@ export default {
   async getMarkers(url, setMarkersState) {
         let markersData = []
         let markerID = 0
-        await axios.get(url)
+        await axios.get(url,  {
+          headers: { 'Authorization': authHeader }
+        })
             .then(res=>{
 
                 for (let i = 0; i < res.data.data.length; i++) {

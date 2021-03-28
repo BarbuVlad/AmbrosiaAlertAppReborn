@@ -23,7 +23,11 @@ let sendStandpointToServer=()=>{
       "name": name,
       "title": title,
       "body": standpoint
-    })
+    },
+      {
+        headers: { 'Authorization': authHeader }
+      }
+    )
       .then(()=>{
         Alert.alert("Thank you for feedback")
         setTitle("")

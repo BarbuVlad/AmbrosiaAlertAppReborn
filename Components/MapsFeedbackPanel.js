@@ -23,7 +23,9 @@ let mapsFeedbackPanel =()=>{
    let dispatch = useDispatch()
 
   let sendFeedbackToServer = async(feedbackUrl, requestStructure)=>{
-    await axios.post(feedbackUrl, requestStructure)
+    await axios.post(feedbackUrl, requestStructure,  {
+      headers: { 'Authorization': authHeader }
+    })
       .then(res=>{
         console.log("REZULTAT TRIMIS PE SERVER ",res.data.message)
         dispatch(markersShouldUpdate())

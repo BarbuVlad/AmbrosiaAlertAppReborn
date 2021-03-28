@@ -33,7 +33,9 @@ let checkIfUserExist = async()=>{
     "http://92.87.91.16/backend_code/api/user/read_single.php?vendor_id="+
     vendorId
 
-  await axios.get(checkUserUrl)
+  await axios.get(checkUserUrl,  {
+    headers: { 'Authorization': authHeader }
+  })
     .then(
       res=>{
         rtnValue = res.data.message
@@ -49,7 +51,12 @@ let createNewUser=async()=>
 {
   let vendorId = await DeviceInfo.getDeviceUniqueId()
   let url = "http://92.87.91.16/backend_code/api/user/create.php"
-  await axios.post(url, { "vendor_id" : vendorId })
+  await axios.post(url,
+    { "vendor_id" : vendorId },
+    {
+      headers: { 'Authorization': authHeader }
+    }
+    )
     .then(res=>{
       console.log("WAS USER CREATED?  ",res.data.message)
       if(res.data.message === "User created"){
@@ -77,7 +84,11 @@ let checkIfValidVolunteer = async (url = newVolunteerURL)=>{
   let y = await axios.post(url  , {
         email: email,
         password: password
-    })
+    },
+    {
+      headers: { 'Authorization': authHeader }
+    }
+    )
         .then(res => {
           console.log("MESAJ: ", res.data.message)
            // console.log("LOGIN SUCCESSFUL from LOCAL STORAGE")

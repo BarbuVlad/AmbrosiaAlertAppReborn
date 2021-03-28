@@ -50,8 +50,10 @@ function Register({navigation})
                 address: address,
                 password: password
 
+            },
+            {
+                headers: { 'Authorization': authHeader }
             }
-
             )
                 .then(res=> {
 
