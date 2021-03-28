@@ -13,11 +13,10 @@ import SplashScreen from './SplashScreen';
 import localStorage from './LocalStorage';
 import {Avatar} from 'react-native-elements';
 import UsersStandpoint from "./UsersStandpoint"
-
-
 import {useSelector, useDispatch} from 'react-redux';
 import {setUserType} from  "../Redux/Actions/UserTypeAction"
 import Localization from "./Localization";
+import Tutorial from "./Sidebar Tutorial/Tutorial"
 
 
 const Drawer = createDrawerNavigator()
@@ -38,7 +37,7 @@ let MapsRoute = ({navigation}) =>{
 
 let Router= ()=> {
 
-    const[isMounted,setIsMounted] = useState(false)
+
     const[userTypeCheck,setUserTypeCheck] = useState("")
     const[email,setEmail] = useState("")
   const[showSplash,setShowSplash] = useState(true)
@@ -140,6 +139,7 @@ let Router= ()=> {
                                     <Drawer.Screen name="Login" component={Login} />
                                     <Drawer.Screen name="Register" component={Register}/>
                                     <Drawer.Screen name="Your Feedback" component={UsersStandpoint}/>
+                                    <Drawer.Screen name="How to use" component={Tutorial}/>
 
                                 </>
 
@@ -147,6 +147,7 @@ let Router= ()=> {
                                 <>
                                     <Drawer.Screen styles ={{}} name="Maps" component={MapsRoute}/>
                                     <Drawer.Screen name="Your Feedback" component={UsersStandpoint}/>
+                                    <Drawer.Screen name="How to use" component={Tutorial}/>
 
                                 </>
 
