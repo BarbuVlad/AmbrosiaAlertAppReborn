@@ -54,7 +54,7 @@ let Router= ()=> {
 
 
         setUserTypeCheck(selector)
-        periodicEmailCheck()
+        periodicEmailCheck().catch(err=>{console.log(err)})
 
 
    setTimeout(() =>  Localization.getCurrentPos((x)=>setShowSplash(x)) ,1000)

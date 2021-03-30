@@ -55,16 +55,11 @@ function Maps({navigation})
           console.log("NEW CREATED SELECTOR:   ", updateMarkersSelector)
 
 
-            setInterval(()=>updateMarkers(),2000)
+
 
 
 
             console.log("SELECTOR IN MAPS IS:   ", selector)
-
-
-
-
-
 
 
 
@@ -78,6 +73,16 @@ function Maps({navigation})
 
 
     },[updateMarkersSelector]);
+
+
+//use this for set interval, otherwise it will act very weird with the state
+    useEffect(()=>{
+     const interval =  setInterval(()=>updateMarkers(),2000)
+      return () => clearInterval(interval)
+    },[redMarkersState,yellowMarkersState])
+
+
+
 
     useFocusEffect(
         //useFocusEffect has 2 mods:
@@ -108,13 +113,21 @@ function Maps({navigation})
         if (selector === "volunteer") {
             AmbrosiaMarkers.getMarkers(
               getYellowMarkersUrl,
-              (sms) => setYellowMarkersState(sms))
+              (sms) => setYellowMarkersState(sms),
+              yellowMarkersState
+            )
         } else {
             setYellowMarkersState([])
         }
+
+
+
         AmbrosiaMarkers.getMarkers(
           getRedMarkersUrl,
-          (sms) => setRedMarkersState(sms))
+          (sms) => setRedMarkersState(sms),
+          redMarkersState
+
+        )
 
     }
 

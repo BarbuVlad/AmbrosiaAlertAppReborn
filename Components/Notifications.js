@@ -6,7 +6,7 @@ let notifiedMarkersList = []
 
  function Notifications(region,redMarkers) {
 
-   console.log("Notified marker list is:  ", notifiedMarkersList)
+   //console.log("Notified marker list is:  ", notifiedMarkersList)
 
     PushNotification.createChannel(
         {
@@ -14,7 +14,7 @@ let notifiedMarkersList = []
             channelName: "Alert", // (required)
 
         },
-        (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+        (created) => {}// (optional) callback returns whether the channel was created, false means it already existed.
     );
 
 
@@ -36,7 +36,7 @@ let notifiedMarkersList = []
                     const dist = NotificationsSettings.distance(
                         parseFloat(region.latitude), parseFloat(region.longitude), marker.coordinate.latitude, marker.coordinate.longitude
                     );//compute distance
-                    if(dist>500){notifiedMarkersList = notifiedMarkersList.filter(id => id !== marker.ID); console.log("ID DELETED: "+id)}//delete id from notified
+                    if(dist>500){notifiedMarkersList = notifiedMarkersList.filter(id => id !== marker.ID); }//delete id from notified
                 }})
                 if(exit){return;}//foreach returns a function for every marker =>return; NOT continue
 
@@ -44,7 +44,7 @@ let notifiedMarkersList = []
                     parseFloat(region.latitude), parseFloat(region.longitude), marker.coordinate.latitude, marker.coordinate.longitude
                 );//compute distance
                 if(dist<200){//the value can be set by the user in settings, making 200 an atribute of type reference...
-                    console.log("CLOSE")
+
                     //Throw notification -> close to ambrosia
                     if (notifiedMarkersList.includes(marker.ID) === false){//make it notified -> don't just add it again
                         notifiedMarkersList=[...notifiedMarkersList, marker.ID];  }

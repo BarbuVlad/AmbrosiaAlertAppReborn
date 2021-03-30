@@ -5,10 +5,6 @@ import {Alert} from 'react-native'
 import DeviceInfo from "./DeviceInfo";
 import localStorage from "./LocalStorage";
 
-
-
-
-
 let markerPlacedAnswerAlert =(message)=>
 {
     Alert.alert(
@@ -108,9 +104,12 @@ export default {
     },
 
 
-  async getMarkers(url, setMarkersState) {
+  async getMarkers(url, setMarkersState,markersState) {
+
         let markersData = []
         let markerID = 0
+
+
         await axios.get(url,  {
           headers: { 'Authorization': authHeader }
         })
@@ -136,9 +135,21 @@ export default {
                 }
 
             })
+          .catch(err =>{})
 
 
-    await setMarkersState(markersData)
+console.log("DATA:  ",markersData.length, "     ", "STATE:  ",markersState.length)
+
+
+
+    if(markersData.length !== markersState.length){
+      setMarkersState(markersData)
+      console.log("MarkersUpdated!!!!!!!!!!!!!!!")
+    }
+
+
+
+
 
 
    },

@@ -26,7 +26,7 @@ export default {
     },
 
    showMyLocationButton(onButtonPress){
-        console.log("FROM BUTTON: ",onButtonPress)
+
         return(
             <View style={styles.locationBtn}>
                 <Icon
