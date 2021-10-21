@@ -150,7 +150,7 @@ let Router= ()=> {
                                         options={{ headerShown: false }}
                                         component={Register}/>
                                     <Drawer.Screen 
-                                        name="Your Feedback" 
+                                        name="Bug Report" 
                                         options={{ headerShown: false }}
                                         component={UsersStandpoint}/>
                                     <Drawer.Screen 

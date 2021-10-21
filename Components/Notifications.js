@@ -1,4 +1,3 @@
-import React from 'react'
 import NotificationsSettings from './NotificationsSettings'
 import PushNotification from "react-native-push-notification";
 
