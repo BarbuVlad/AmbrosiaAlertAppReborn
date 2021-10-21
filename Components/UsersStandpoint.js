@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, TextInput, View, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { Text, TextInput, View, StyleSheet, TouchableOpacity, Alert,ScrollView, Dimensions } from "react-native";
 import externalStyles from "../Styles/Form.styles"
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import axios from "axios";
@@ -9,9 +9,12 @@ let standpointUrl= "http://92.87.91.16/backend_code/api/user_review/send_review.
 
 function usersStandpoint({navigation}){
 
-  const [title,setTitle] = useState("")
+  const [bugTitle,setBugTitle] = useState("")
   const [name,setName] = useState("")
-  const [standpoint,setStandpoint] = useState("")
+  const [bugDescription, setBugDescription] = useState("")
+  const [stepsToReproduce,setStepsToReproduce] = useState("")
+  const [actualResult, setActualResult] = useState("")
+  const [expectedResult, setExpectedResult] = useState("")
 
 
 
@@ -45,40 +48,69 @@ let sendStandpointToServer=()=>{
 }
 
   return(
+     <ScrollView>
     <View style={externalStyles.container}>
+     
+        
 
-        <Text style={externalStyles.logoText}>Give Us Feedback</Text>
+        <Text style={externalStyles.logoText}>Bug Report</Text>
 
       <View style={externalStyles.inputView}>
         <TextInput
           style={externalStyles.inputText}
-          placeholder="Title of your feedback"
+          placeholder="Bug Title"
           placeholderTextColor="#BEBEBE"
-          onChangeText={text => setTitle(text)}
-          value = {title}
+          onChangeText={text => setBugTitle(text)}
+          value = {bugTitle}
         />
       </View>
+
       <View style={externalStyles.inputView}>
         <TextInput
           style={externalStyles.inputText}
-          placeholder="Your full name(optional)"
+          placeholder="Bug Description"
           placeholderTextColor="#BEBEBE"
-          onChangeText={text => setName(text)}
-          value = {name}
+          onChangeText={text => setBugDescription(text)}
+          value = {bugDescription}
         />
       </View>
+
       <View style = {styles.feedbackContainer}>
         <TextInput
           multiline={true}
           style={styles.feedbackTextField}
-          placeholder="Write here your feedback(10.000 letters max)"
+          placeholder={"Steps to reproduce the bug"}
           placeholderTextColor="#BEBEBE"
-          onChangeText={text => setStandpoint(text)}
-          value={standpoint}
+          onChangeText={text => setStepsToReproduce(text)}
+          value={stepsToReproduce}
         />
       </View>
+
+       <View style = {styles.feedbackContainer}>
+        <TextInput
+          multiline={true}
+          style={styles.feedbackTextField}
+          placeholder={"Actual result"}
+          placeholderTextColor="#BEBEBE"
+          onChangeText={text => setActualResult(text)}
+          value={actualResult}
+        />
+      </View>
+
+       <View style = {styles.feedbackContainer}>
+        <TextInput
+          multiline={true}
+          style={styles.feedbackTextField}
+          placeholder={"Expected result"}
+          placeholderTextColor="#BEBEBE"
+          onChangeText={text => setExpectedResult(text)}
+          value={expectedResult}
+        />
+      </View>
+
+   <View style = {styles.reportBugButtonContainer}>
       <TouchableOpacity
-      style={externalStyles.loginButton}
+      style={styles.reportBugButton}
       onPress={()=> {
 
       return sendStandpointToServer()
@@ -86,15 +118,20 @@ let sendStandpointToServer=()=>{
     }}>
       <Text style={{color:'white',fontSize: 22}}>SEND FEEDBACK</Text>
     </TouchableOpacity>
+   </View>
+
+
+   
 
     </View>
+     </ScrollView>
   )
 
 }
 
 const styles = StyleSheet.create({
   titleContainer: {
-
+    justifyContent: 'center',
     marginTop:30,
 
 
@@ -106,7 +143,7 @@ const styles = StyleSheet.create({
 
   },
   feedbackTextField:{
-    height: hp('30%'), // 70% of height device screen
+    height: hp('15%'), // 70% of height device screen
     width: wp('82%') ,  // 80% of width device screen
       margin: 12,
       borderWidth: 1,
@@ -118,6 +155,27 @@ const styles = StyleSheet.create({
   feedbackContainer:{
 
 
+  },
+
+  reportBugButtonContainer:{
+   
+    
+    width: Dimensions.get('window').width/1.2,
+    justifyContent: 'center',
+    marginBottom: 55,
+    marginTop:40,
+    
+   
+  },
+  reportBugButton:{
+        
+        backgroundColor:"#06beb6",
+        borderRadius:25,
+        height:50,
+        alignItems:"center",
+        justifyContent:"center",
+        
+       
   }
 })
 

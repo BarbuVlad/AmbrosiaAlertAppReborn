@@ -131,23 +131,49 @@ let Router= ()=> {
 
 
                     <Drawer.Navigator initialRouteName="Splash"
-                            drawerContent={ userHelloAndLogout}>
+                            drawerContent={ userHelloAndLogout}
+                           
+                            >
                         {userTypeCheck === "normalUser" ?
                             (
                                 <>
-                                    <Drawer.Screen name="Maps" component={MapsRoute}/>
-                                    <Drawer.Screen name="Login" component={Login} />
-                                    <Drawer.Screen name="Register" component={Register}/>
-                                    <Drawer.Screen name="Your Feedback" component={UsersStandpoint}/>
-                                    <Drawer.Screen name="How to use" component={Tutorial}/>
+                                    <Drawer.Screen 
+                                        name="Maps" 
+                                        options={{ headerShown: false }}
+                                        component={MapsRoute}/>
+                                    <Drawer.Screen 
+                                        name="Login" 
+                                        options={{ headerShown: false }}
+                                        component={Login} />
+                                    <Drawer.Screen 
+                                        name="Register" 
+                                        options={{ headerShown: false }}
+                                        component={Register}/>
+                                    <Drawer.Screen 
+                                        name="Your Feedback" 
+                                        options={{ headerShown: false }}
+                                        component={UsersStandpoint}/>
+                                    <Drawer.Screen 
+                                        name="How to use" 
+                                        options={{ headerShown: false }}
+                                        component={Tutorial}/>
 
                                 </>
 
                             ):(
                                 <>
-                                    <Drawer.Screen styles ={{}} name="Maps" component={MapsRoute}/>
-                                    <Drawer.Screen name="Your Feedback" component={UsersStandpoint}/>
-                                    <Drawer.Screen name="How to use" component={Tutorial}/>
+                                    <Drawer.Screen 
+                                        name="Maps"
+                                        options={{ headerShown: false }} 
+                                        component={MapsRoute}/>
+                                    <Drawer.Screen 
+                                        name="Your Feedback" 
+                                        options={{ headerShown: false }}
+                                        component={UsersStandpoint}/>
+                                    <Drawer.Screen 
+                                        name="How to use" 
+                                        options={{ headerShown: false }}
+                                        component={Tutorial}/>
 
                                 </>
 
