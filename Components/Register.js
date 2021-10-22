@@ -95,7 +95,7 @@ function Register({navigation})
     }
 
     return(
-      <ScrollView>
+      <ScrollView contentContainerStyle={{flex:1}}>
         <View style = {styles.container}>
 
 
