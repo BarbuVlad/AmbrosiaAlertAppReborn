@@ -1,130 +1,146 @@
 import React, { useState } from "react";
-import { Text, TextInput, View, StyleSheet, TouchableOpacity, Alert,ScrollView, Dimensions } from "react-native";
+import { Text, TextInput, View, StyleSheet, TouchableOpacity, Alert, ScrollView, Dimensions } from "react-native";
 import externalStyles from "../Styles/Form.styles"
-import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen'
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import axios from "axios";
 
 
-let standpointUrl= "https://ambrosiaalert.xyz/backend_code/api/user_review/send_review.php"
+let bugReportUrl = "https://ambrosiaalert.xyz/backend_code/api/user_review/send_review.php"
 
-function usersStandpoint({navigation}){
+function usersStandpoint({ navigation }) {
 
-  const [bugTitle,setBugTitle] = useState("")
-  const [name,setName] = useState("")
+  const [bugTitle, setBugTitle] = useState("")
+  const [phoneModel, setPhoneModel] = useState("")
   const [bugDescription, setBugDescription] = useState("")
-  const [stepsToReproduce,setStepsToReproduce] = useState("")
+  const [stepsToReproduce, setStepsToReproduce] = useState("")
   const [actualResult, setActualResult] = useState("")
   const [expectedResult, setExpectedResult] = useState("")
 
 
+  let sendStandpointToServer = () => {
 
-
-
-let sendStandpointToServer=()=>{
-
-    axios.post(standpointUrl,{
-      "name": name,
-      "title": title,
-      "body": standpoint
+    axios.post(bugReportUrl, {
+      "bug_title": bugTitle,
+      "phone_model": phoneModel,
+      "bug_description": bugDescription,
+      "steps_to_reproduce": stepsToReproduce,
+      "actual_result": actualResult,
+      "expected_result": expectedResult
     },
       {
-        headers: { 'Authorization': authHeader }
+        headers: { 'Content-Type': 'application/json' }
       }
     )
-      .then(()=>{
-        Alert.alert("Thank you for feedback")
-        setTitle("")
-        setName("")
-        setStandpoint("")
+      .then(() => {
+        Alert.alert("Thank you for your bug report!")
+        setBugTitle("")
+        setPhoneModel("")
+        setBugDescription("")
+        setStepsToReproduce("")
+        setActualResult("")
+        setExpectedResult("")
         navigation.navigate("Maps")
-        }).
-      catch(()=>{
-        Alert.alert("Failed to send")
+      })
+      .catch((err) => {
+        if (err) {
+          Alert.alert("Failed to send")
+        }
 
-    })
+
+      })
 
 
 
-}
+  }
 
-  return(
-     <ScrollView>
-    <View style={externalStyles.container}>
-     
-        
+  return (
+    <ScrollView>
+      <View style={externalStyles.container}>
+
+
 
         <Text style={externalStyles.logoText}>Bug Report</Text>
 
-      <View style={externalStyles.inputView}>
-        <TextInput
-          style={externalStyles.inputText}
-          placeholder="Bug Title"
-          placeholderTextColor="#BEBEBE"
-          onChangeText={text => setBugTitle(text)}
-          value = {bugTitle}
-        />
+        <View style={externalStyles.inputView}>
+          <TextInput
+            style={externalStyles.inputText}
+            placeholder="Bug Title"
+            placeholderTextColor="#BEBEBE"
+            onChangeText={text => setBugTitle(text)}
+            value={bugTitle}
+          />
+        </View>
+
+        <View style={externalStyles.inputView}>
+          <TextInput
+            style={externalStyles.inputText}
+            placeholder="Bug Description"
+            placeholderTextColor="#BEBEBE"
+            onChangeText={text => setBugDescription(text)}
+            value={bugDescription}
+          />
+        </View>
+
+        <View style={externalStyles.inputView}>
+          <TextInput
+            style={externalStyles.inputText}
+            placeholder="Phone Model"
+            placeholderTextColor="#BEBEBE"
+            onChangeText={text => setPhoneModel(text)}
+            value={phoneModel}
+          />
+        </View>
+
+        <View style={styles.feedbackContainer}>
+          <TextInput
+            multiline={true}
+            style={styles.feedbackTextField}
+            placeholder={"Steps to reproduce the bug"}
+            placeholderTextColor="#BEBEBE"
+            onChangeText={text => setStepsToReproduce(text)}
+            value={stepsToReproduce}
+          />
+        </View>
+
+        <View style={styles.feedbackContainer}>
+          <TextInput
+            multiline={true}
+            style={styles.feedbackTextField}
+            placeholder={"Actual result"}
+            placeholderTextColor="#BEBEBE"
+            onChangeText={text => setActualResult(text)}
+            value={actualResult}
+          />
+        </View>
+
+        <View style={styles.feedbackContainer}>
+          <TextInput
+            multiline={true}
+            style={styles.feedbackTextField}
+            placeholder={"Expected result"}
+            placeholderTextColor="#BEBEBE"
+            onChangeText={text => setExpectedResult(text)}
+            value={expectedResult}
+          />
+        </View>
+
+        <View style={styles.reportBugButtonContainer}>
+          <TouchableOpacity
+            style={styles.reportBugButton}
+            onPress={() => {
+
+              return sendStandpointToServer()
+
+            }}>
+            <Text style={{ color: 'white', fontSize: 22 }}>SEND BUG REPORT</Text>
+          </TouchableOpacity>
+        </View>
+
+
+
+
       </View>
-
-      <View style={externalStyles.inputView}>
-        <TextInput
-          style={externalStyles.inputText}
-          placeholder="Bug Description"
-          placeholderTextColor="#BEBEBE"
-          onChangeText={text => setBugDescription(text)}
-          value = {bugDescription}
-        />
-      </View>
-
-      <View style = {styles.feedbackContainer}>
-        <TextInput
-          multiline={true}
-          style={styles.feedbackTextField}
-          placeholder={"Steps to reproduce the bug"}
-          placeholderTextColor="#BEBEBE"
-          onChangeText={text => setStepsToReproduce(text)}
-          value={stepsToReproduce}
-        />
-      </View>
-
-       <View style = {styles.feedbackContainer}>
-        <TextInput
-          multiline={true}
-          style={styles.feedbackTextField}
-          placeholder={"Actual result"}
-          placeholderTextColor="#BEBEBE"
-          onChangeText={text => setActualResult(text)}
-          value={actualResult}
-        />
-      </View>
-
-       <View style = {styles.feedbackContainer}>
-        <TextInput
-          multiline={true}
-          style={styles.feedbackTextField}
-          placeholder={"Expected result"}
-          placeholderTextColor="#BEBEBE"
-          onChangeText={text => setExpectedResult(text)}
-          value={expectedResult}
-        />
-      </View>
-
-   <View style = {styles.reportBugButtonContainer}>
-      <TouchableOpacity
-      style={styles.reportBugButton}
-      onPress={()=> {
-
-      return sendStandpointToServer()
-
-    }}>
-      <Text style={{color:'white',fontSize: 22}}>SEND BUG REPORT</Text>
-    </TouchableOpacity>
-   </View>
-
-
-   
-
-    </View>
-     </ScrollView>
+    </ScrollView>
   )
 
 }
@@ -132,7 +148,7 @@ let sendStandpointToServer=()=>{
 const styles = StyleSheet.create({
   titleContainer: {
     justifyContent: 'center',
-    marginTop:30,
+    marginTop: 30,
 
 
   },
@@ -142,40 +158,40 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
 
   },
-  feedbackTextField:{
+  feedbackTextField: {
     height: hp('15%'), // 70% of height device screen
-    width: wp('82%') ,  // 80% of width device screen
-      margin: 12,
-      borderWidth: 1,
-    borderRadius:30,
+    width: wp('82%'),  // 80% of width device screen
+    margin: 12,
+    borderWidth: 1,
+    borderRadius: 30,
     textAlignVertical: 'top',
     fontSize: 20
 
   },
-  feedbackContainer:{
+  feedbackContainer: {
 
 
   },
 
-  reportBugButtonContainer:{
-   
-    
-    width: Dimensions.get('window').width/1.2,
+  reportBugButtonContainer: {
+
+
+    width: Dimensions.get('window').width / 1.2,
     justifyContent: 'center',
     marginBottom: 55,
-    marginTop:40,
-    
-   
+    marginTop: 40,
+
+
   },
-  reportBugButton:{
-        
-        backgroundColor:"#06beb6",
-        borderRadius:25,
-        height:50,
-        alignItems:"center",
-        justifyContent:"center",
-        
-       
+  reportBugButton: {
+
+    backgroundColor: "#06beb6",
+    borderRadius: 25,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+
+
   }
 })
 
