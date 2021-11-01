@@ -5,7 +5,7 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 import axios from "axios";
 
 
-let standpointUrl= "http://92.87.91.16/backend_code/api/user_review/send_review.php"
+let standpointUrl= "https://ambrosiaalert.xyz/backend_code/api/user_review/send_review.php"
 
 function usersStandpoint({navigation}){
 
@@ -116,7 +116,7 @@ let sendStandpointToServer=()=>{
       return sendStandpointToServer()
 
     }}>
-      <Text style={{color:'white',fontSize: 22}}>SEND FEEDBACK</Text>
+      <Text style={{color:'white',fontSize: 22}}>SEND BUG REPORT</Text>
     </TouchableOpacity>
    </View>
 

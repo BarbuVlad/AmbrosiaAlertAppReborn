@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
-import { Alert, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
+import React, {Fragment, useState} from 'react';
+import { Alert, ScrollView, Text, TextInput, TouchableOpacity, View, Linking } from "react-native";
 import styles from '../Styles/Form.styles';
 import axios from 'axios';
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 
 
 
@@ -16,6 +17,7 @@ function Register({navigation})
     const [address,setAddress] = useState("")
     const [password,setPassword] = useState("")
     const [passwordCheck,setPasswordCheck] = useState("")
+    const [gdprCheckBox, setGdprCheckbox] = useState(false)
 
     let createNewVolunteerURL= "http://92.87.91.16/backend_code/api/new_volunteer/create.php"
 
@@ -99,7 +101,7 @@ function Register({navigation})
         <View style = {styles.container}>
 
 
-            <Text style={styles.logoText}>Become a Member</Text>
+            <Text style={styles.logoText}>Become a Volunteer</Text>
 
             <View style = {styles.inputView}>
                 <TextInput
@@ -173,12 +175,35 @@ function Register({navigation})
                 />
             </View>
 
+             <View style={{flexDirection: 'row', marginTop: 10}}>
+                <BouncyCheckbox
+                size={25}
+                fillColor="#06beb6"
+                unfillColor="#FFFFFF"
+                iconStyle={{ borderColor: "#48b1bf" }}
+                textStyle={{ fontFamily: "JosefinSans-Regular" }}
+                onPress={(isChecked) => {setGdprCheckbox(isChecked)}}
+                />
 
+                <Fragment>
+                     <Text>
+                        I accept the {""}
+                    </Text>
+                     <Text 
+                        style={{color:'blue'}}
+                        onPress={() => Linking.openURL('https://gdpr.eu/data-processing-agreement/')}>
+                            Terms and Conditions
+                    </Text> 
+                    </Fragment>
+
+            </View>
+            
             <TouchableOpacity
-                style={styles.loginButton}
-                onPress={createNewVolunteer} >
+                style={[styles.loginButton,{marginBottom:25}]}
+                onPress={()=> gdprCheckBox && createNewVolunteer()} >
                 <Text style={{color:'white',fontSize: 22}}>REGISTER</Text>
             </TouchableOpacity>
+            
 
         </View>
         </ScrollView>
