@@ -79,8 +79,6 @@ let placeMarkerLogic = async (region, typeOfUser, updateMarkers) => {
 
 
 
-
-
 export default {
 
 
