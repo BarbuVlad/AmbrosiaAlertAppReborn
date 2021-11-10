@@ -1,31 +1,47 @@
-import React, {Fragment, useState} from 'react';
+import React, { Fragment, useState, useEffect, useRef } from 'react';
 import { Alert, ScrollView, Text, TextInput, TouchableOpacity, View, Linking } from "react-native";
 import styles from '../Styles/Form.styles';
 import axios from 'axios';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import * as Animatable from 'react-native-animatable';
 
 
 
 
-function Register({navigation})
-{
+function Register({ navigation }) {
 
-    const [firstName,setFirstName] = useState("")
-    const [lastName,setLastName] = useState("")
-    const [email,setEmail] = useState("")
-    const [phoneNumber,setPhoneNumber] = useState("")
-    const [address,setAddress] = useState("")
-    const [password,setPassword] = useState("")
-    const [passwordCheck,setPasswordCheck] = useState("")
+    const [firstName, setFirstName] = useState("")
+    const [lastName, setLastName] = useState("")
+    const [email, setEmail] = useState("")
+    const [phoneNumber, setPhoneNumber] = useState("")
+    const [address, setAddress] = useState("")
+    const [password, setPassword] = useState("")
+    const [passwordCheck, setPasswordCheck] = useState("")
     const [gdprCheckBox, setGdprCheckbox] = useState(false)
+    const [isRegisterBtnPressed, setIsRegisterBtnPressed] = useState(0)
+    const [lengthChangeAfterBtnPressed, setLengthChangeAfterBtnPressed] = useState(0)
+    const [formValidation, setFormValidation] = useState({
+        fnNotNull: false,
+        lnNotNull: false,
+        emailNotNull: false,
+        emailFormat: "regex",
+        pnAtLeast8digits: false,
+        addressNotNull: false,
+        passwordNotNull: false,
 
-    let createNewVolunteerURL= "http://92.87.91.16/backend_code/api/new_volunteer/create.php"
+    })
 
-    let passwordMatch=()=>{
+
+
+    let createNewVolunteerURL = "http://92.87.91.16/backend_code/api/new_volunteer/create.php"
+
+
+
+    let passwordMatch = () => {
         let passMatch
         passMatch = password === passwordCheck // check is password equal passwordCheck and store in passMatch
 
-        if (passMatch === false){
+        if (passMatch === false) {
             Alert.alert(
                 "Error",
                 "Make sure the password is the same in both password fields",
@@ -40,10 +56,18 @@ function Register({navigation})
         return passMatch
     }
 
-    let createNewVolunteer= ()=>{
+    let createNewVolunteer = () => {
+        let ok = 0
 
-        if(passwordMatch())
-        {
+        for (const property in formValidation) {
+            if (formValidation[property] === false) {
+                break
+            }
+            else ok = 1
+        }
+
+
+        if (passwordMatch() && ok === 1) {
             axios.post(createNewVolunteerURL, {
                 first_name: firstName,
                 last_name: lastName,
@@ -53,11 +77,11 @@ function Register({navigation})
                 password: password
 
             },
-            {
-                headers: { 'Authorization': authHeader }
-            }
+                {
+                    headers: { 'Authorization': authHeader }
+                }
             )
-                .then(res=> {
+                .then(res => {
 
                     setFirstName("")
                     setLastName("")
@@ -80,7 +104,7 @@ function Register({navigation})
                     );
 
                 })
-                .catch(err=> {
+                .catch(err => {
                     console.log(err)
                     Alert.alert(
                         "Error",
@@ -96,116 +120,197 @@ function Register({navigation})
 
     }
 
-    return(
-      <ScrollView contentContainerStyle={{flex:1}}>
-        <View style = {styles.container}>
+    return (
+        <ScrollView>
+            <View style={styles.container}>
 
 
-            <Text style={styles.logoText}>Become a Volunteer</Text>
+                <Text style={styles.logoText}>Become a Volunteer</Text>
 
-            <View style = {styles.inputView}>
-                <TextInput
-                    style={styles.inputText}
-                    placeholder="First Name"
-                    placeholderTextColor="#BEBEBE"
-                    onChangeText={text => setFirstName(text)}
-                    value={firstName}
-                />
-            </View>
+                <View style={[styles.inputView, { flex: 1 }]}>
+                    <TextInput
+                        style={styles.inputText}
+                        placeholder="First Name"
+                        placeholderTextColor="#BEBEBE"
+                        onChangeText={text => setFirstName(text)}
+                        value={firstName}
+                    />
+                </View>
+                {formValidation.fnNotNull ? <Animatable.View
+                    animation={"bounceIn"}
+                    duration={500}
+                    style={{ height: 50, marginTop: -30 }}>
 
-            <View style = {styles.inputView}>
-                <TextInput
-                    style={styles.inputText}
-                    placeholder="Last Name"
-                    placeholderTextColor="#BEBEBE"
-                    onChangeText={text => setLastName(text)}
-                    value={lastName}
-                />
-            </View>
+                    <Text
+                        style={styles.validationErrorTextMessage}>
+                        First Name field cannot be empty</Text>
 
-            <View style = {styles.inputView}>
-                <TextInput
-                    style={styles.inputText}
-                    placeholder="Email"
-                    placeholderTextColor="#BEBEBE"
-                    onChangeText={text => setEmail(text)}
-                    value={email}
-                />
-            </View>
+                </Animatable.View> : null}
 
-            <View style = {styles.inputView}>
-                <TextInput
-                    style={styles.inputText}
-                    placeholder="Phone Number"
-                    placeholderTextColor="#BEBEBE"
-                    onChangeText={text => setPhoneNumber(text)}
-                    value={phoneNumber}
-                />
-            </View>
 
-            <View style = {styles.inputView}>
-                <TextInput
-                    style={styles.inputText}
-                    placeholder="Address"
-                    placeholderTextColor="#BEBEBE"
-                    onChangeText={text => setAddress(text)}
-                    value={address}
-                />
-            </View>
+                <View style={styles.inputView}>
+                    <TextInput
+                        style={styles.inputText}
+                        placeholder="Last Name"
+                        placeholderTextColor="#BEBEBE"
+                        onChangeText={text => setLastName(text)}
+                        value={lastName}
+                    />
 
-            <View style = {styles.inputView}>
-                <TextInput
-                    style={styles.inputText}
-                    placeholder="Password"
-                    placeholderTextColor="#BEBEBE"
-                    secureTextEntry={true}
-                    onChangeText={text => setPassword(text)}
-                    value={password}
-                />
-            </View>
+                </View>
+                {formValidation.lnNotNull ?
+                    <Animatable.View
+                        animation={"bounceIn"}
+                        duration={500}
+                        style={{ height: 50, marginTop: -30 }}>
 
-            <View style = {styles.inputView}>
-                <TextInput
-                    style={styles.inputText}
-                    placeholder="Repeat Password"
-                    placeholderTextColor="#BEBEBE"
-                    secureTextEntry={true}
-                    onChangeText={text => setPasswordCheck(text)}
-                    value={passwordCheck}
-                />
-            </View>
+                        <Text
+                            style={styles.validationErrorTextMessage}>
+                            Last Name field cannot be empty</Text>
 
-             <View style={{flexDirection: 'row', marginTop: 10}}>
-                <BouncyCheckbox
-                size={25}
-                fillColor="#06beb6"
-                unfillColor="#FFFFFF"
-                iconStyle={{ borderColor: "#48b1bf" }}
-                textStyle={{ fontFamily: "JosefinSans-Regular" }}
-                onPress={(isChecked) => {setGdprCheckbox(isChecked)}}
-                />
+                    </Animatable.View> : null}
 
-                <Fragment>
-                     <Text>
-                        I accept the {""}
-                    </Text>
-                     <Text 
-                        style={{color:'blue'}}
-                        onPress={() => Linking.openURL('https://gdpr.eu/data-processing-agreement/')}>
+
+                <View style={styles.inputView}>
+                    <TextInput
+                        style={styles.inputText}
+                        placeholder="Email"
+                        placeholderTextColor="#BEBEBE"
+                        onChangeText={text => setEmail(text)}
+                        value={email}
+                    />
+
+                </View>
+
+                {formValidation.emailNotNull ? <Animatable.View
+                    animation={"bounceIn"}
+                    duration={500}
+                    style={{ height: 50, marginTop: -30 }}>
+
+                    <Text
+                        style={styles.validationErrorTextMessage}>
+                        Email field cannot be empty</Text>
+
+                </Animatable.View> : null}
+
+                <View style={styles.inputView}>
+                    <TextInput
+                        style={styles.inputText}
+                        placeholder="Phone Number"
+                        placeholderTextColor="#BEBEBE"
+                        keyboardType={"numeric"}
+                        onChangeText={text => setPhoneNumber(text)}
+                        value={phoneNumber}
+                    />
+
+                </View>
+                {formValidation.fnNotNull === true ? null :
+                    <Animatable.View
+                        animation={"bounceIn"}
+                        duration={500}
+                        style={{ height: 50, marginTop: -30 }}>
+
+                        <Text
+                            style={styles.validationErrorTextMessage}>
+                            Phone Number cannot be lower than 8 digits </Text>
+
+                    </Animatable.View>
+                }
+
+
+                <View style={styles.inputView}>
+                    <TextInput
+                        style={styles.inputText}
+                        placeholder="City"
+                        placeholderTextColor="#BEBEBE"
+                        onChangeText={text => setAddress(text)}
+                        value={address}
+                    />
+
+                </View>
+
+                {formValidation.addressNotNull ? <Animatable.View
+                    animation={"bounceIn"}
+                    duration={500}
+                    style={{ height: 50, marginTop: -30 }}>
+
+                    <Text
+                        style={styles.validationErrorTextMessage}>
+                        City field cannot be empty </Text>
+
+                </Animatable.View> : null}
+
+
+                <View style={styles.inputView}>
+                    <TextInput
+                        style={styles.inputText}
+                        placeholder="Password"
+                        placeholderTextColor="#BEBEBE"
+                        secureTextEntry={true}
+                        onChangeText={text => setPassword(text)}
+                        value={password}
+                    />
+
+                </View>
+                {formValidation.passwordNotNull ? <Animatable.View
+                    animation={"bounceIn"}
+                    duration={500}
+                    style={{ height: 50, marginTop: -30 }}>
+
+                    <Text
+                        style={styles.validationErrorTextMessage}>
+                        Password field cannot be empty </Text>
+
+                </Animatable.View> : null}
+
+                <View style={styles.inputView}>
+                    <TextInput
+                        style={styles.inputText}
+                        placeholder="Repeat Password"
+                        placeholderTextColor="#BEBEBE"
+                        secureTextEntry={true}
+                        onChangeText={text => setPasswordCheck(text)}
+                        value={passwordCheck}
+                    />
+
+
+
+                </View>
+
+                <View style={{ flexDirection: 'row', marginTop: 10 }}>
+                    <BouncyCheckbox
+                        size={25}
+                        fillColor="#06beb6"
+                        unfillColor="#FFFFFF"
+                        iconStyle={{ borderColor: "#48b1bf" }}
+                        textStyle={{ fontFamily: "JosefinSans-Regular" }}
+                        onPress={(isChecked) => { setGdprCheckbox(isChecked) }}
+                    />
+
+                    <Fragment>
+                        <Text>
+                            I accept the {""}
+                        </Text>
+                        <Text
+                            style={{ color: 'blue' }}
+                            onPress={() => Linking.openURL('https://gdpr.eu/data-processing-agreement/')}>
                             Terms and Conditions
-                    </Text> 
+                        </Text>
                     </Fragment>
 
-            </View>
-            
-            <TouchableOpacity
-                style={[styles.loginButton,{marginBottom:25}]}
-                onPress={()=> gdprCheckBox && createNewVolunteer()} >
-                <Text style={{color:'white',fontSize: 22}}>REGISTER</Text>
-            </TouchableOpacity>
-            
+                </View>
 
-        </View>
+                <TouchableOpacity
+                    style={[styles.loginButton, { marginBottom: 25 }]}
+                    onPress={() => {
+                        gdprCheckBox && createNewVolunteer();
+                        setIsRegisterBtnPressed(isRegisterBtnPressed => isRegisterBtnPressed + 1)
+                    }} >
+                    <Text style={{ color: 'white', fontSize: 22 }}>REGISTER</Text>
+                </TouchableOpacity>
+
+
+            </View>
         </ScrollView>
     )
 }

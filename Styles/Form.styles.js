@@ -7,6 +7,7 @@ export default StyleSheet.create({
         backgroundColor: 'white',
         alignItems: 'center',
         justifyContent: 'center',
+        
 
     },
     logoText:{
@@ -32,7 +33,7 @@ export default StyleSheet.create({
         height:50,
         fontSize: 20,
         color:'black',
-        textAlign: 'center'
+        textAlign: 'center',
     },
     loginButton:{
         width:"80%",
@@ -53,6 +54,10 @@ export default StyleSheet.create({
         justifyContent:"center",
         marginTop:1,
         marginBottom:10
+    },
+    validationErrorTextMessage:{
+        color: 'red',
+        marginTop: 15
     }
 
 })
